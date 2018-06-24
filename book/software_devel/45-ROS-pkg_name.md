@@ -100,7 +100,7 @@ Let's look at [`src/talker.py`][talker-py] as an example.
 
 ROS nodes are put under the `src` folder and they have to be made executable to function properly.
 
-See: You use `chmod` for this; see [](#chmod).
+See: You use `chmod` for this; see [](+software_reference#chmod).
 
 ### Header
 
