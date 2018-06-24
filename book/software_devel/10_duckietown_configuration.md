@@ -18,31 +18,25 @@ Note: The way to set these up is to add them in the file `~/.bashrc` (`export ![
 
 
 <col3 figure-id="tab:environment-variables" class='labels-row1'>
-    <figcaption>Environment variables used by the software</figcaption>
-
+   <figcaption>Environment variables used by the software</figcaption>
     <s>variable</s>
     <s>reasonable value</s>
     <s>contains</s>
-
     <s><code>DUCKIETOWN_ROOT</code></s>
     <s><code>~/duckietown</code></s>
     <s><code>Software</code> repository</s>
-
     <s><code>DUCKIEFLEET_ROOT</code></s>
     <s><code>~/duckiefleet</code></s>
     <s>Where to look for class-specific information (people DB, robots DB).</s>
-
     <s><code>DUCKIETOWN_DATA</code></s>
     <s><code>~/duckietown-data</code></s>
     <s>The place where to look for logs.</s>
-
     <s><code>DUCKIETOWN_TMP</code></s>
     <s></s>
     <s>If set, directory to use for temporary files. If not set, we use the default ( <code>/tmp</code>).</s>
-
     <s><code>DUCKIETOWN_CONFIG_SEQUENCE</code></s>
     <s><code>defaults:baseline:vehicle:user</code></s>
-    <s>The <a href="#easy_node">configuration sequence for EasyNode</a></s>
+    <s>The <a href="+code_docs#easy_node">configuration sequence for EasyNode</a></s>
 </col3>
 
 <style>
@@ -118,7 +112,7 @@ Explanations of the fields:
 
 <!-- do not change the ID "machines"; it's linked in the code -->
 
-Make sure you already set up ROS ([](#build-repo)).
+Make sure you already set up ROS ([](+opmanual_duckiebot#build-repo)).
 
 Activate ROS:
 
