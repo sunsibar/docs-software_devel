@@ -52,11 +52,11 @@ CONTAINER ID     IMAGE           ...     NAMES
 52994ef22481     daphne/duck     ...     happy_hamster
 ```
 
-Note how Daphne's container has container ID, a base image, and a funny-looking name.
+Note how Daphne's container has container ID, a base image, and a funny-looking name, `happy_hamster`.
 
 ## Containers come from other containers
 
-So you have a terminal and an internet connection? Doesn’t matter what operating system you’re running. Now you can run almost any Linux program in just a few keystrokes. No further steps are necessary. How neat is that? To have a single tool that clones a program and its environment, fetches the appropriate dependencies, and runs on any OS is a big timesaver. Suppose you have a program that runs on one computer. It is extremely likely to run on any other, regardless of the underlying OS or hardware. But how do you create a Docker image? There are two ways. You can either snapshot a running Docker container, or you can write a plaintext recipe. First, let’s see how to create a snapshot:
+So you have a terminal and an internet connection? Now it doesn’t matter what operating system you’re running. You can run almost any Linux program in the world with just a few keystrokes. No further steps are necessary. How neat is that? To have a tool that clones a program and its environment, fetches the appropriate dependencies, and runs it on any OS is a big timesaver. Suppose you have a program that runs on one computer. It is extremely likely to run on any other, regardless of the underlying OS or hardware. But how do you create a Docker **image**? There are two ways. You can either snapshot a running Docker container, or you can write a plaintext recipe. First, let’s see how to create a snapshot:
 
 ```
 $ docker run -it daphne/duck bash
@@ -70,7 +70,7 @@ total 0
 -rw-r--r-- 1 root root 0 May 21 20:52 new_file
 ```
 
-However if we exit the container and rerun, we may notice an alarming result:
+However if we exit the container and rerun it, we may notice an alarming result:
 
 ```
 root@295fd7879184:/# exit
@@ -82,7 +82,7 @@ total 0
 -rw-r--r-- 1 root root 0 May 21 21:32 new_file1
 ```
 
-It seems like `new_file` has disappeared! Notice how the container ID (`18f13bb4571a`) is now different. This is because we ran a new container from the image `daphne/duck`, rather than restarting our old container. Let's see all the containers on our machine:
+It seems like `new_file` has disappeared! Notice how the container ID (`18f13bb4571a`) is now different. This is because `docker run daphne/duck` created a new container from the image `daphne/duck`, rather than restarting our old container. Let's see all the containers on our machine:
 
 ```
 $ docker container ls -a
