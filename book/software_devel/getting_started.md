@@ -53,6 +53,9 @@ If you prefer to use your computer's native command line, you can also connect t
 
 1. Open Portainer Web interface and run the "duckietown/rpi-docker-python-picamera" container; publish port 8080 and make sure that you run the container in "Privileged" mode.
 ![Portainer PiCam Demo](picam-container.png)
+or run via command line:
+`docker -H <DUCKIEBOT_NAME>.local run -d --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera`
+
 2. Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/image.jpg`
 
 
@@ -60,7 +63,7 @@ If you prefer to use your computer's native command line, you can also connect t
 
 To run Duckietown software, launch a container from either the console or the Portainer interace with the following command:
 
-`docker run -it --privileged duckietown/software`
+`docker -H <DUCKIEBOT_NAME>.local run -it --privileged duckietown/software`
 
 Depending on your connection speed, this step may take a while. Once inside the container, you may run some demos like so:
 
