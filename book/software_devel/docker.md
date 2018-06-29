@@ -167,7 +167,7 @@ root@500d0dca385d:/#
 
 Notice as soon as we run the container, Docker runs our `ls` command, revealing `new_file1` was already present. This was part of the container build.
 
-Docker has a concept of layers. Every line we add to the Dockerfile that begins with one of the Dockerfile keywords (denoted in ALL CAPS) will add a new layer, which is conveniently cached by the [Docker daemon](https://docs.docker.com/engine/reference/commandline/dockerd/). If we change some lines in a large Dockerfile, Docker will only need to rerun the lines that have changed. Let’s have a look:
+Docker has a concept of [layers](https://docs.docker.com/storage/storagedriver/#images-and-layers). Every instruction we add to the Dockerfile beginning with a [Dockerfile keyword](https://docs.docker.com/engine/reference/builder/#from) (which is always CAPITALIZED) will add a new layer, which is conveniently cached by the [Docker daemon](https://docs.docker.com/engine/reference/commandline/dockerd/). If we modify some lines in a Dockerfile, Docker will only need to rebuild starting from the first modified instruction. Let’s have a look:
 
 ```
 FROM dapne/duck                             # Defines the base container
