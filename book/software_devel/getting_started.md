@@ -66,23 +66,36 @@ Put the SD card into the Duckiebot and power on.
 1. Open Portainer Web interface and run the "duckietown/rpi-docker-python-picamera" container; publish port 8080 and make sure that you run the container in "Privileged" mode.
 ![Portainer PiCam Demo](picam-container.png)
 or run via command line:
-`docker -H <DUCKIEBOT_NAME>.local run -d --name picam --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera`
+
+```
+docker -H <DUCKIEBOT_NAME>.local run -d --name picam --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera
+```
 
 2. Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/image.jpg`
 
 ## Test ROS
 
 It is best to first pull the `base` Duckietown Docker image using the following command:
-`docker -H <DUCKIEBOT_NAME>.local pull duckietown/rpi-ros-kinetic-roscore`
+
+```
+docker -H <DUCKIEBOT_NAME>.local pull duckietown/rpi-ros-kinetic-roscore
+```
 
 Run the `base` Duckietown Docker image, opening a shell:
-`docker -H <DUCKIEBOT_NAME>.local run -it --rm --name duckieos --privileged --net host duckietown/rpi-ros-kinetic-roscore`
+
+```
+docker -H <DUCKIEBOT_NAME>.local run -it --rm --name duckieos --privileged --net host duckietown/rpi-ros-kinetic-roscore
+```
 
 You can start a ROS environment on your laptop, that connects to the Duckiebot ROS Master:
-`nvidia-docker run -it --rm --name ros --env ROS_HOSTNAME=$HOSTNAME --env ROS_MASTER_URI=http://<DUCKIEBOT_IP>:11311 --env ROS_IP=<LAPTOP_IP> --net host --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  osrf/ros:kinetic-desktop-full`
+
+```
+nvidia-docker run -it --rm --name ros --env ROS_HOSTNAME=$HOSTNAME --env ROS_MASTER_URI=http://<DUCKIEBOT_IP>:11311 --env ROS_IP=<LAPTOP_IP> --net host --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  osrf/ros:kinetic-desktop-full
+```
 
 The above command opens a "ROS" shell running on your laptop that is set to connect to <DUCKIEBOT>'s ROS Master.
 To test the ROS connection, run `roswtf`:
+
 `$ roswtf`
 
 ## Test ROS Joystick
