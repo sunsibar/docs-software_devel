@@ -26,7 +26,10 @@ To interact with the Duckiebot, the computer must have the following software:
 
 Place the Duckiebot’s SD card into the MicroSD card adapter, insert it into the computer and run the following command:
 
-`sudo sh -c "$(wget -O- h.ndan.co)"`
+`sh -c "$(wget -O- h.ndan.co)"`
+
+The above command runs the `flash-hypriot.sh` script located at:
+https://raw.githubusercontent.com/rusi/duckietown.dev.land/master/assets/flash-hypriot.sh
 
 This will download and run an installer to prepare the SD card.
 Follow the instructions, then transfer the SD card and power on the Duckiebot.
@@ -48,15 +51,46 @@ If you prefer to use your computer's native command line, you can also connect t
 
 `ssh <USER_NAME>@<DUCKIEBOT_NAME>.local`
 
+# Changing WIFI Access Point and PSK
+
+Put the Duckiebot’s SD card into the MicroSD card adapter, insert it into the computer.
+The drive should be mounted under `/media/<USER>/root`.
+Edit the `/media/<USER>/root/etc/wpa_supplicant/wpa_supplicant.conf` file.
+Update the `ssid` and `psk` fields.
+
+Save the file and unmount the SD card.
+Put the SD card into the Duckiebot and power on.
 
 # Test PiCam
 
 1. Open Portainer Web interface and run the "duckietown/rpi-docker-python-picamera" container; publish port 8080 and make sure that you run the container in "Privileged" mode.
 ![Portainer PiCam Demo](picam-container.png)
 or run via command line:
-`docker -H <DUCKIEBOT_NAME>.local run -d --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera`
+`docker -H <DUCKIEBOT_NAME>.local run -d --name picam --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera`
 
 2. Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/image.jpg`
+
+# Test ROS
+
+It is best to first pull the `base` Duckietown Docker image using the following command:
+`docker -H <DUCKIEBOT_NAME>.local pull duckietown/software`
+
+Run the `base` Duckietown Docker image, opening a shell:
+`docker -H <DUCKIEBOT_NAME>.local run -it --rm --name duckieos --privileged --net host duckietown/software`
+
+The above command opens a "ROS" shell running on the Duckiebot inside the DuckieOS (ROS) container.
+You can start `roscore`:
+`$ roscore`
+
+You can start a ROS environment on your laptop, that connects to the Duckiebot ROS Master:
+`nvidia-docker run -it --rm --name ros --env ROS_HOSTNAME=$HOSTNAME --env ROS_MASTER_URI=http://<DUCKIEBOT_IP>:11311 --env ROS_IP=<LAPTOP_IP> --net host --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  osrf/ros:kinetic-desktop-full`
+
+The above command opens a "ROS" shell running on your laptop that is set to connect to <DUCKIEBOT>'s ROS Master.
+To test the ROS connection, run `roswtf`:
+`$ roswtf`
+
+# Test ROS Joystick
+
 
 
 # TODO:
@@ -70,3 +104,43 @@ Depending on your connection speed, this step may take a while. Once inside the 
 * `roslaunch pkg_name talker.launch`
 * `roslaunch duckietown joystick.launch veh:=docker`
 * `roslaunch duckietown_demos lane_following.launch line_detector_param_file_name:=$*`
+modify lane_...
+apt install libffi-dev
+apt install libturbojpeg
+install picamera - pip install
+pip install jpeg4py
+copy /home/duckiefleet/calibrations/camera_intrinsic/docker.yaml
+copy /home/duckiefleet/calibrations/camera_extrinsic/docker.yaml
+edit /home/software/catkin_ws/src/10-lane-control/lane_filter/include/lane_filter/lane_filter.py : 158
+edit /home/software/catkin_ws/src/10-lane-control/lane_filter/src/lane_filter_node.py : 123
+
+
+# Building images:
+
+## duckietown/ducker.git
+
+```
+cd ducker/monolith
+docker build . --tag monolith
+```
+
+## breandan/Software.git
+
+```
+cd Software
+docker build . --tag duckieos
+```
+
+## Transferring Docker containers
+
+```
+docker save duckieos | ssh -C duckie@duckiebot.local docker load 
+```
+
+```
+docker save duckieos | bzip2 | ssh duckie@duckiebot.local 'bunzip2 | docker load'
+```
+
+```
+docker save duckieos | bzip2 | pv | ssh duckie@duckiebot.local 'bunzip2 | docker load'
+```
