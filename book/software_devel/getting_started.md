@@ -51,7 +51,7 @@ If you prefer to use your computer's native command line, you can also connect t
 
 `ssh <USER_NAME>@<DUCKIEBOT_NAME>.local`
 
-# Changing WIFI Access Point and PSK
+## Changing WIFI Access Point and PSK
 
 Put the Duckiebot’s SD card into the MicroSD card adapter, insert it into the computer.
 The drive should be mounted under `/media/<USER>/root`.
@@ -61,7 +61,7 @@ Update the `ssid` and `psk` fields.
 Save the file and unmount the SD card.
 Put the SD card into the Duckiebot and power on.
 
-# Test PiCam
+## Test PiCam
 
 1. Open Portainer Web interface and run the "duckietown/rpi-docker-python-picamera" container; publish port 8080 and make sure that you run the container in "Privileged" mode.
 ![Portainer PiCam Demo](picam-container.png)
@@ -70,17 +70,13 @@ or run via command line:
 
 2. Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/image.jpg`
 
-# Test ROS
+## Test ROS
 
 It is best to first pull the `base` Duckietown Docker image using the following command:
-`docker -H <DUCKIEBOT_NAME>.local pull duckietown/software`
+`docker -H <DUCKIEBOT_NAME>.local pull duckietown/rpi-ros-kinetic-roscore`
 
 Run the `base` Duckietown Docker image, opening a shell:
-`docker -H <DUCKIEBOT_NAME>.local run -it --rm --name duckieos --privileged --net host duckietown/software`
-
-The above command opens a "ROS" shell running on the Duckiebot inside the DuckieOS (ROS) container.
-You can start `roscore`:
-`$ roscore`
+`docker -H <DUCKIEBOT_NAME>.local run -it --rm --name duckieos --privileged --net host duckietown/rpi-ros-kinetic-roscore`
 
 You can start a ROS environment on your laptop, that connects to the Duckiebot ROS Master:
 `nvidia-docker run -it --rm --name ros --env ROS_HOSTNAME=$HOSTNAME --env ROS_MASTER_URI=http://<DUCKIEBOT_IP>:11311 --env ROS_IP=<LAPTOP_IP> --net host --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  osrf/ros:kinetic-desktop-full`
@@ -89,9 +85,44 @@ The above command opens a "ROS" shell running on your laptop that is set to conn
 To test the ROS connection, run `roswtf`:
 `$ roswtf`
 
-# Test ROS Joystick
+## Test ROS Joystick
 
 
+## Resources & References
+
+* SC Card Configuration & Flashing script
+  * https://github.com/rusi/duckietown.dev.land/tree/master/assets
+  * https://raw.githubusercontent.com/rusi/duckietown.dev.land/master/assets/flash-hypriot.sh
+
+* RPi Camera Test container
+  * https://github.com/rusi/rpi-docker-python-picamera
+  * https://hub.docker.com/r/duckietown/rpi-docker-python-picamera/
+
+* Duckiebot ROS containers
+  * Base ROS container - opens bash shell when launched
+    * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-base
+    * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-base
+  * `roscore` container - starts `roscore` when launched
+    * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-roscore
+    * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
+  * Duckietown Base (monolithic) software container - opens bash shell when launched
+    * https://github.com/duckietown/Software
+    * https://hub.docker.com/r/duckietown/rpi-duckiesoft-base
+
+* Joystick Demo container
+  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-joystick-demo
+  * https://hub.docker.com/r/duckietown/rpi-duckiebot-joystick-demo
+
+* Calibration container
+  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-calibration
+  * https://hub.docker.com/r/duckietown/rpi-duckiebot-calibration
+
+* Line Following Demo container
+  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-linefollowing-demo
+  * https://hub.docker.com/r/duckietown/rpi-duckiebot-linefollowing-demo
+
+* Desktop ROS containers
+  * osrf/ros:kinetic-desktop-full
 
 # TODO:
 
