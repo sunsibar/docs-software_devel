@@ -132,7 +132,7 @@ To test the ROS connection, run `roswtf`:
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
   * Duckietown Base (monolithic) software container - opens bash shell when launched
     * https://github.com/duckietown/Software
-    * https://hub.docker.com/r/duckietown/rpi-duckiesoft-base
+    * https://hub.docker.com/r/duckietown/rpi-duckiebot-base
 
 * Joystick Demo container
   * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-joystick-demo
