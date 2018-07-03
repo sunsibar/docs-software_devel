@@ -14,15 +14,14 @@ Those who wish to use a physical Duckiebot will need these physical objects:
 To interact with the Duckiebot, the computer must have the following software:
 
 * POSIX-compliant shell
-* GNU wget
-* Browser and/or Docker
+* Browser and/or [Docker CE](https://www.docker.com/community-edition#/download)
 
 ## Installation
 
 * Software Prerequisites (Ubuntu/Debian)
   * wget
   * apt-get
-  * Docker
+  * Docker (May be installed with `wget -qO- https://get.docker.com/ | sh`)
 
 Place the Duckiebot’s SD card into the MicroSD card adapter, insert it into the computer and run the following command:
 
@@ -37,7 +36,7 @@ Wait for a minute, then visit the following URL:
 
 `http://<DUCKIEBOT_NAME>.local:9000/`
 
-You should be greeted by a Portainer web interface.
+You should be greeted by the Portainer web interface.
 This user-friendly web interface is the primary mechanism for interacting with a Duckiebot.
 Here you can see the list of running containers on your machine:
 
@@ -47,21 +46,19 @@ You can attach a console to a running container and interact with it via the bro
 
 ![Portainer Web Interface](portainer_duckieshell.png)
 
-If you prefer to use your computer's native command line, you can also connect to the Duckiebot via SSH from your terminal in the following way:
+If you prefer the command line, you can also connect to the Duckiebot via secure shell:
 
 `ssh <USER_NAME>@<DUCKIEBOT_NAME>.local`
 
 ## Changing WIFI Access Point and PSK
 
-Put the Duckiebot’s SD card into the MicroSD card adapter, insert it into the computer.
+Insert the Duckiebot’s Micro SD card into the adapter and insert it into the computer.
 The drive should be mounted under `/media/<USER>/root`.
-Edit the `/media/<USER>/root/etc/wpa_supplicant/wpa_supplicant.conf` file.
-Update the `ssid` and `psk` fields.
+Open the `/media/<USER>/root/etc/wpa_supplicant/wpa_supplicant.conf` file and update the `ssid` and `psk` fields.
 
-Save the file and unmount the SD card.
-Put the SD card into the Duckiebot and power on.
+Save the file and unmount the drive, then insert the SD card into the Raspberry Pi and power on the Duckiebot.
 
-## Test PiCam
+## Testing PiCam
 
 1. Open Portainer Web interface and run the "duckietown/rpi-docker-python-picamera" container; publish port 8080 and make sure that you run the container in "Privileged" mode.
 ![Portainer PiCam Demo](picam-container.png)
@@ -94,7 +91,7 @@ docker -H <DUCKIEBOT_NAME>.local run -it --name roscore \
   duckietown/rpi-ros-kinetic-roscore
 ```
 
-You can start a ROS environment on your laptop, that connects to the Duckiebot ROS Master:
+You can start a ROS environment on your laptop, which connects to the Duckiebot ROS Master:
 
 ```
 nvidia-docker run -it --rm --name ros \
@@ -108,8 +105,7 @@ nvidia-docker run -it --rm --name ros \
   rosindustrial/ros-robot-nvidia:kinetic
 ```
 
-NOTE: there is a better (more secure) way to do this,
-but you might also need to allow X connections by running `xhost +` on your host.
+To allow incoming X connections, run `xhost +` on your computer. NOTE: there is a [more secure way](http://wiki.ros.org/docker/Tutorials/GUI#The_safer_way) to do this.
 
 The above command opens a "ROS" shell running on your laptop that is set to connect to <DUCKIEBOT>'s ROS Master.
 To test the ROS connection, run `roswtf`:
@@ -117,7 +113,6 @@ To test the ROS connection, run `roswtf`:
 `$ roswtf`
 
 ## Test ROS Joystick
-
 
 ## Calibration
 
@@ -232,18 +227,9 @@ docker save duckieos | ssh -C duckie@duckiebot.local docker load
 
 ## Building images:
 
-## duckietown/ducker.git
-
 ```
-cd ducker/monolith
-docker build . --tag monolith
-```
-
-## breandan/Software.git
-
-```
-cd Software
-docker build . --tag duckieos
+cd image-builder-rpi
+docker build . --tag <TAG_NAME>
 ```
 
 ## Notes
