@@ -157,16 +157,16 @@ NOTE2: You can run/launch the `picam` test which opens a web server that allows 
 download all files from `/data` - this is an easy way to view and download all calibration files
 and validation results.
 
-## Line Following Demo
+## Lane Following Demo
 
-After the Duckiebot has been calibration, you can launch the Line Following Demo:
+After the Duckiebot has been calibration, you can launch the Lane Following Demo:
 
 ```
-docker -H <DUCKIEBOT_NAME>.local run -it --name linefollowing-demo \
+docker -H <DUCKIEBOT_NAME>.local run -it --name lanefollowing-demo \
   --privileged \
   -v /data:/data \
   --net host \
-  duckietown/rpi-duckiebot-linefollowing-demo
+  duckietown/rpi-duckiebot-lanefollowing-demo
 ```
 
 You need to wait for a couple of minutes for all nodes to be started and initialized.
@@ -188,11 +188,11 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
   * https://hub.docker.com/r/duckietown/rpi-simple-server/
 
 * Duckiebot ROS containers
-  * Base ROS container - opens bash shell when launched
+  * Base ROS container - base ROS container (does NOT have `picamera`); opens bash shell when launched
     * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-base
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-base
-  * Base ROS container with `picam` and `jpeg4py` libraries
-    * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-picam
+  * Base ROS container with development tools & Duckietown dependencies (includes `picamera`)
+    * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-dev
   * `roscore` container - starts `roscore` when launched
     * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-roscore
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
@@ -208,9 +208,9 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
   * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-calibration
   * https://hub.docker.com/r/duckietown/rpi-duckiebot-calibration
 
-* Line Following Demo container
-  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-linefollowing-demo
-  * https://hub.docker.com/r/duckietown/rpi-duckiebot-linefollowing-demo
+* Lane Following Demo container
+  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-lanefollowing-demo
+  * https://hub.docker.com/r/duckietown/rpi-duckiebot-lanefollowing-demo
 
 * Desktop ROS containers
   * rosindustrial/ros-robot-nvidia:kinetic
