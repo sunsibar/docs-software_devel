@@ -74,7 +74,22 @@ NOTE: adding the `-v /data:/data` option would persist the captured image on the
 
 2. Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/image.jpg`
 
-## Test ROS
+## Running Simple HTTP File Server
+
+All persistent data is stored under `/data` on the Duckiebot SD card. To access the data via the web browser, run:
+
+```
+docker -H <DUCKEBOT_NAME>.local run -d --name file-server \
+  -v /data:/data \
+  -p 8080:8080 duckietown/rpi-simple-server
+```
+
+Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/`
+
+NOTE: make sure that the `picam` container is stopped. Alternative, you can use a different port, e.g.
+`docker -H <DUCKIEBOT_NAME>.local run -d --name file-server -v /data:/data -p 8080:8090 duckietown/rpi-simple-server`
+
+## Testing ROS
 
 It is best to first pull the `base` Duckietown Docker image using the following command:
 
@@ -111,6 +126,8 @@ The above command opens a "ROS" shell running on your laptop that is set to conn
 To test the ROS connection, run `roswtf`:
 
 `$ roswtf`
+
+----------------------
 
 ## Test ROS Joystick
 
@@ -165,6 +182,10 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
 * RPi Camera Test container
   * https://github.com/rusi/rpi-docker-python-picamera
   * https://hub.docker.com/r/duckietown/rpi-docker-python-picamera/
+
+* RPi Simple HTTP File Server
+  * https://github.com/rusi/rpi-simple-server
+  * https://hub.docker.com/r/duckietown/rpi-simple-server/
 
 * Duckiebot ROS containers
   * Base ROS container - opens bash shell when launched
