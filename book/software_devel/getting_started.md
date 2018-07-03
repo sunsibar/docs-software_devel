@@ -134,7 +134,7 @@ Launch the calibration container:
 ```
 docker -H <DUCKIEBOT_NAME>.local run -it --name calibration \
   --privileged \
-  -v /data:/data
+  -v /data:/data \
   --net host \
   duckietown/rpi-duckiebot-calibration
 ```
@@ -152,7 +152,7 @@ After the Duckiebot has been calibration, you can launch the Line Following Demo
 ```
 docker -H <DUCKIEBOT_NAME>.local run -it --name linefollowing-demo \
   --privileged \
-  -v /data:/data
+  -v /data:/data \
   --net host \
   duckietown/rpi-duckiebot-linefollowing-demo
 ```
@@ -175,6 +175,8 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
   * Base ROS container - opens bash shell when launched
     * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-base
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-base
+  * Base ROS container with `picam` and `jpeg4py` libraries
+    * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-picam
   * `roscore` container - starts `roscore` when launched
     * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-roscore
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
@@ -253,3 +255,6 @@ docker save duckieos | bzip2 | ssh duckie@duckiebot.local 'bunzip2 | docker load
 ```
 docker save duckieos | bzip2 | pv | ssh duckie@duckiebot.local 'bunzip2 | docker load'
 ```
+
+replace raspistill with picamera
+2592 x 1944
