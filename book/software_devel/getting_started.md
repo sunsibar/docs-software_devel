@@ -69,8 +69,11 @@ or run via command line:
 
 ```
 docker -H <DUCKIEBOT_NAME>.local run -d --name picam \
+  -v /data:/data \
   --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera
 ```
+
+NOTE: adding the `-v /data:/data` option would persist the captured image on the Duckiebot's SD card.
 
 2. Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/image.jpg`
 
@@ -85,7 +88,7 @@ docker -H <DUCKIEBOT_NAME>.local pull duckietown/rpi-ros-kinetic-roscore
 Run the `base` Duckietown Docker image, opening a shell:
 
 ```
-docker -H <DUCKIEBOT_NAME>.local run -it --name duckieos \
+docker -H <DUCKIEBOT_NAME>.local run -it --name roscore \
   --privileged \
   --net host \
   duckietown/rpi-ros-kinetic-roscore
@@ -102,8 +105,11 @@ nvidia-docker run -it --rm --name ros \
   --env="DISPLAY" \
   --env="QT_X11_NO_MITSHM=1" \
   --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"\
-  osrf/ros:kinetic-desktop-full
+  rosindustrial/ros-robot-nvidia:kinetic
 ```
+
+NOTE: there is a better (more secure) way to do this,
+but you might also need to allow X connections by running `xhost +` on your host.
 
 The above command opens a "ROS" shell running on your laptop that is set to connect to <DUCKIEBOT>'s ROS Master.
 To test the ROS connection, run `roswtf`:
@@ -112,6 +118,48 @@ To test the ROS connection, run `roswtf`:
 
 ## Test ROS Joystick
 
+
+## Calibration
+
+Print calibration pattern:
+https://drive.google.com/file/d/0B1iMTx9IcQVwN2pEcXE4RUF1VVk/view?pli=1
+
+Place the robot on the pattern as described in section 16.2 in the "Camera calibration and validation" section:
+http://docs.duckietown.org/opmanual_duckiebot/out/camera_calib.html
+
+### Extrinsic calibration procedure
+
+Launch the calibration container:
+
+```
+docker -H <DUCKIEBOT_NAME>.local run -it --name calibration \
+  --privileged \
+  -v /data:/data
+  --net host \
+  duckietown/rpi-duckiebot-calibration
+```
+
+NOTE: Passing `-v /data:/data` is necessary so that all calibration settings will be preserved!
+
+NOTE2: You can run/launch the `picam` test which opens a web server that allows you to view and
+download all files from `/data` - this is an easy way to view and download all calibration files
+and validation results.
+
+## Line Following Demo
+
+After the Duckiebot has been calibration, you can launch the Line Following Demo:
+
+```
+docker -H <DUCKIEBOT_NAME>.local run -it --name linefollowing-demo \
+  --privileged \
+  -v /data:/data
+  --net host \
+  duckietown/rpi-duckiebot-linefollowing-demo
+```
+
+You need to wait for a couple of minutes for all nodes to be started and initialized.
+You can test the Duckiebot by using the Joystick. Pressing `R1` starts `autonomous` mode.
+Pressing `L1` puts the Duckiebot back in `manual` mode.
 
 ## Resources & References
 
@@ -147,6 +195,9 @@ To test the ROS connection, run `roswtf`:
   * https://hub.docker.com/r/duckietown/rpi-duckiebot-linefollowing-demo
 
 * Desktop ROS containers
+  * rosindustrial/ros-robot-nvidia:kinetic
+    * https://hub.docker.com/r/rosindustrial/ros-robot-nvidia/
+    * https://github.com/ros-industrial/docker
   * osrf/ros:kinetic-desktop-full
 
 # TODO:
@@ -171,7 +222,13 @@ edit /home/software/catkin_ws/src/10-lane-control/lane_filter/include/lane_filte
 edit /home/software/catkin_ws/src/10-lane-control/lane_filter/src/lane_filter_node.py : 123
 
 
-# Building images:
+## Transferring Docker containers
+
+```
+docker save duckieos | ssh -C duckie@duckiebot.local docker load 
+```
+
+## Building images:
 
 ## duckietown/ducker.git
 
@@ -187,11 +244,7 @@ cd Software
 docker build . --tag duckieos
 ```
 
-## Transferring Docker containers
-
-```
-docker save duckieos | ssh -C duckie@duckiebot.local docker load 
-```
+## Notes
 
 ```
 docker save duckieos | bzip2 | ssh duckie@duckiebot.local 'bunzip2 | docker load'
