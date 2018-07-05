@@ -133,11 +133,7 @@ To test the ROS connection, run `roswtf`:
 
 ## Calibration
 
-Print calibration pattern:
-https://drive.google.com/file/d/0B1iMTx9IcQVwN2pEcXE4RUF1VVk/view?pli=1
-
-Place the robot on the pattern as described in section 16.2 in the "Camera calibration and validation" section:
-http://docs.duckietown.org/opmanual_duckiebot/out/camera_calib.html
+Print the [calibration pattern](https://github.com/duckietown/Software/blob/master/catkin_ws/src/00-infrastructure/duckietown/config/baseline/calibration/camera_intrinsic/calibration_pattern.pdf) and place the Duckiebot on the pattern as described in [Section 16.2, Camera calibration and validation](http://docs.duckietown.org/opmanual_duckiebot/out/camera_calib.html).
 
 ### Extrinsic calibration procedure
 
@@ -153,7 +149,7 @@ docker -H <DUCKIEBOT_NAME>.local run -it --name calibration \
 
 NOTE: Passing `-v /data:/data` is necessary so that all calibration settings will be preserved!
 
-NOTE2: You can run/launch the `picam` test which opens a web server that allows you to view and
+NOTE: You can run/launch the `picam` test which opens a web server that allows you to view and
 download all files from `/data` - this is an easy way to view and download all calibration files
 and validation results.
 
@@ -233,6 +229,8 @@ Depending on your connection speed, this step may take a while. Once inside the 
 * `roslaunch pkg_name talker.launch`
 * `roslaunch duckietown joystick.launch veh:=docker`
 * `roslaunch duckietown_demos lane_following.launch line_detector_param_file_name:=$*`
+
+```
 modify lane_...
 apt install libffi-dev
 apt install libturbojpeg
@@ -242,7 +240,7 @@ copy /home/duckiefleet/calibrations/camera_intrinsic/docker.yaml
 copy /home/duckiefleet/calibrations/camera_extrinsic/docker.yaml
 edit /home/software/catkin_ws/src/10-lane-control/lane_filter/include/lane_filter/lane_filter.py : 158
 edit /home/software/catkin_ws/src/10-lane-control/lane_filter/src/lane_filter_node.py : 123
-
+```
 
 ## Transferring Docker containers
 
