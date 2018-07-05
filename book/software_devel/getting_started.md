@@ -159,7 +159,7 @@ and validation results.
 
 ## Lane Following Demo
 
-After the Duckiebot has been calibration, you can launch the Lane Following Demo:
+After the Duckiebot has been calibrated, you can launch the Lane Following Demo:
 
 ```
 docker -H <DUCKIEBOT_NAME>.local run -it --name lanefollowing-demo \
@@ -169,13 +169,14 @@ docker -H <DUCKIEBOT_NAME>.local run -it --name lanefollowing-demo \
   duckietown/rpi-duckiebot-lanefollowing-demo
 ```
 
-You need to wait for a couple of minutes for all nodes to be started and initialized.
+Wait for a few minutes for all nodes to be started and initialized.
 You can test the Duckiebot by using the Joystick. Pressing `R1` starts `autonomous` mode.
 Pressing `L1` puts the Duckiebot back in `manual` mode.
 
 ## Docker Image Hierarchy
 
-![Docker Image Hierarchy](docker_diagram.svg)
+![Docker Image Hierarchy](docker_diagram.svg) <!-- https://docs.google.com/drawings/d/1mGcXME9O0dLJgEhLhHPv9RJmNADWstP3a6GgMmktiJU/edit?usp=sharing -->
+
 
 ## Resources & References
 
