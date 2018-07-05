@@ -257,6 +257,14 @@ cd image-builder-rpi
 docker build . --tag <TAG_NAME>
 ```
 
+## Output of `rqt_dep joystick` (compilation dependencies)
+
+![](rqt_dep_joystick.png)
+
+## Output of `rqt_graph joystick` (runtime dependencies)
+
+![](rqt_graph_joystick.png)
+
 ## Notes
 
 ```
