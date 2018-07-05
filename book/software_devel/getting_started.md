@@ -175,8 +175,9 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
 
 ## Docker Image Hierarchy
 
-![Docker Image Hierarchy](docker_diagram.svg) <!-- https://docs.google.com/drawings/d/1mGcXME9O0dLJgEhLhHPv9RJmNADWstP3a6GgMmktiJU/edit?usp=sharing -->
-
+<img src="https://docs.google.com/drawings/d/e/2PACX-1vSd8bDjc46uEnlH3KBIV5ePpVtzcxyf-DMQpZsLdGjCHguWbQllSoz7p_gK-6wgig0n_7rI6HOjKx8q/pub?w=1089&amp;h=987"><!--
+Link to edit: https://docs.google.com/drawings/d/1mGcXME9O0dLJgEhLhHPv9RJmNADWstP3a6GgMmktiJU/edit?usp=sharing
+--></img>
 
 ## Resources & References
 
