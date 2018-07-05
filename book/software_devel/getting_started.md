@@ -173,6 +173,10 @@ You need to wait for a couple of minutes for all nodes to be started and initial
 You can test the Duckiebot by using the Joystick. Pressing `R1` starts `autonomous` mode.
 Pressing `L1` puts the Duckiebot back in `manual` mode.
 
+## Docker Image Hierarchy
+
+![Docker Image Hierarchy](docker_diagram.svg)
+
 ## Resources & References
 
 * SC Card Configuration & Flashing script
