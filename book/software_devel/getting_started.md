@@ -193,27 +193,27 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
 
 * Duckiebot ROS containers
   * Base ROS container - base ROS container (does NOT have `picamera`); opens bash shell when launched
-    * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-base
+    * https://github.com/duckietown/rpi-ros-kinetic-base
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-base
   * Base ROS container with development tools & Duckietown dependencies (includes `picamera`)
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-dev
   * `roscore` container - starts `roscore` when launched
-    * https://github.com/duckietown/ducker/tree/master/rpi-ros-kinetic-roscore
+    * https://github.com/duckietown/rpi-ros-kinetic-roscore
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
   * Duckietown Base (monolithic) software container - opens bash shell when launched
     * https://github.com/duckietown/Software
     * https://hub.docker.com/r/duckietown/rpi-duckiebot-base
 
 * Joystick Demo container
-  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-joystick-demo
+  * https://github.com/duckietown/rpi-duckiebot-joystick-demo
   * https://hub.docker.com/r/duckietown/rpi-duckiebot-joystick-demo
 
 * Calibration container
-  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-calibration
+  * https://github.com/duckietown/rpi-duckiebot-calibration
   * https://hub.docker.com/r/duckietown/rpi-duckiebot-calibration
 
 * Lane Following Demo container
-  * https://github.com/duckietown/ducker/tree/master/rpi-duckiebot-lanefollowing-demo
+  * https://github.com/duckietown/rpi-duckiebot-lanefollowing-demo
   * https://hub.docker.com/r/duckietown/rpi-duckiebot-lanefollowing-demo
 
 * Desktop ROS containers
