@@ -143,13 +143,21 @@ To test the ROS connection, run `roswtf`:
 
 ## Test ROS Joystick
 
+```
+docker -H <DUCKIEBOT>.local run -d --name joystick-demo \
+    --privileged \
+    -v /data:/data \
+    --net host \
+    duckietown/rpi-duckiebot-joystick-demo
+```
+
 ## Calibration
 
 Print the [calibration pattern](https://github.com/duckietown/Software/blob/master/catkin_ws/src/00-infrastructure/duckietown/config/baseline/calibration/camera_intrinsic/calibration_pattern.pdf) and place the Duckiebot on the pattern as described in [Section 16.2, Camera calibration and validation](http://docs.duckietown.org/opmanual_duckiebot/out/camera_calib.html).
 
 ### Extrinsic calibration procedure
 
-Launch the calibration container:
+Launch the calibration container and follow the prompts:
 
 ```
 docker -H <DUCKIEBOT_NAME>.local run -it --name calibration \
@@ -159,9 +167,12 @@ docker -H <DUCKIEBOT_NAME>.local run -it --name calibration \
   duckietown/rpi-duckiebot-calibration
 ```
 
+You will first be asked to place the Duckiebot on the calibration pattern. Then
+you will be asked to place in a lane to test the calibration.
+
 NOTE: Passing `-v /data:/data` is necessary so that all calibration settings will be preserved!
 
-NOTE: You can run/launch the `picam` test which opens a web server that allows you to view and
+NOTE: You can run/launch the `rpi-simple-server` to see the results in your web browser; you can also
 download all files from `/data` - this is an easy way to view and download all calibration files
 and validation results.
 
