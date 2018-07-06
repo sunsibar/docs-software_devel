@@ -243,41 +243,20 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
     * https://github.com/osrf/docker_images/blob/master/ros/kinetic/ubuntu/xenial/desktop-full/
     * https://hub.docker.com/r/osrf/ros/
 
-# TODO:
 
-To run Duckietown software, launch a container from either the console or the Portainer interace with the following command:
+## Misc
 
-`docker -H <DUCKIEBOT_NAME>.local run -it --privileged duckietown/software`
-
-Depending on your connection speed, this step may take a while. Once inside the container, you may run some demos like so:
-
-* `roslaunch pkg_name talker.launch`
-* `roslaunch duckietown joystick.launch veh:=docker`
-* `roslaunch duckietown_demos lane_following.launch line_detector_param_file_name:=$*`
-
-```
-modify lane_...
-apt install libffi-dev
-apt install libturbojpeg
-install picamera - pip install
-pip install jpeg4py
-copy /home/duckiefleet/calibrations/camera_intrinsic/docker.yaml
-copy /home/duckiefleet/calibrations/camera_extrinsic/docker.yaml
-edit /home/software/catkin_ws/src/10-lane-control/lane_filter/include/lane_filter/lane_filter.py : 158
-edit /home/software/catkin_ws/src/10-lane-control/lane_filter/src/lane_filter_node.py : 123
-```
-
-## Transferring Docker containers
-
-```
-docker save duckieos | ssh -C duckie@duckiebot.local docker load 
-```
-
-## Building images:
+### Building images:
 
 ```
 cd image-builder-rpi
 docker build . --tag <TAG_NAME>
+```
+
+### Transferring Docker containers
+
+```
+docker save <TAG_NAME> | ssh -C duckie@<DUCKIEBOT_NAME>.local docker load
 ```
 
 ## Output of `rqt_dep joystick` (compilation dependencies)
@@ -288,15 +267,3 @@ docker build . --tag <TAG_NAME>
 
 ![](rqt_graph_joystick.png)
 
-## Notes
-
-```
-docker save duckieos | bzip2 | ssh duckie@duckiebot.local 'bunzip2 | docker load'
-```
-
-```
-docker save duckieos | bzip2 | pv | ssh duckie@duckiebot.local 'bunzip2 | docker load'
-```
-
-replace raspistill with picamera
-2592 x 1944
