@@ -60,8 +60,10 @@ Save the file and unmount the drive, then insert the SD card into the Raspberry 
 
 ## Testing PiCam
 
-1. Open Portainer Web interface and run the "duckietown/rpi-docker-python-picamera" container; publish port 8080 and make sure that you run the container in "Privileged" mode.
+1. Open Portainer Web interface and run the `duckietown/rpi-docker-python-picamera` container. Publish port 8080 and ensure that the container is run in "Privileged" mode.
+
 ![Portainer PiCam Demo](picam-container.png)
+
 or run via command line:
 
 ```
@@ -70,6 +72,7 @@ docker -H <DUCKIEBOT_NAME>.local run -d --name picam \
   --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera
 ```
 
+NOTE: The syntax `-H <DUCKIEBOT_NAME>.local` may be omitted if you are running the command over SSH.
 NOTE: adding the `-v /data:/data` option would persist the captured image on the Duckiebot's SD card.
 
 2. Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/image.jpg`
@@ -86,8 +89,15 @@ docker -H <DUCKEBOT_NAME>.local run -d --name file-server \
 
 Go to the following URL: `http://<DUCKIEBOT_NAME>.local:8080/`
 
-NOTE: make sure that the `picam` container is stopped. Alternative, you can use a different port, e.g.
-`docker -H <DUCKIEBOT_NAME>.local run -d --name file-server -v /data:/data -p 8080:8090 duckietown/rpi-simple-server`
+NOTE: make sure that the `picam` container is stopped. Alternative, you can use a different port:
+
+```
+docker -H <DUCKIEBOT_NAME>.local run -d --name file-server \
+-v /data:/data \
+-p 8080:8090 duckietown/rpi-simple-server
+```
+
+TODO: Utilize external storage device in keeping with [configuration DB17-d](http://docs.duckietown.org/opmanual_duckiebot/out/duckiebot_configurations.html).
 
 ## Testing ROS
 
@@ -120,12 +130,14 @@ nvidia-docker run -it --rm --name ros \
   rosindustrial/ros-robot-nvidia:kinetic
 ```
 
-To allow incoming X connections, run `xhost +` on your computer. NOTE: there is a [more secure way](http://wiki.ros.org/docker/Tutorials/GUI#The_safer_way) to do this.
+To allow incoming X connections, run `xhost +` on your computer. 
 
-The above command opens a "ROS" shell running on your laptop that is set to connect to <DUCKIEBOT>'s ROS Master.
+NOTE: There is a [more secure way](http://wiki.ros.org/docker/Tutorials/GUI#The_safer_way) to do this, if you are concerned about receiving arbitrary X11 connections.
+
+The above command opens a "ROS" shell running on your laptop that is set to connect to `DUCKIEBOT`'s ROS Master.
 To test the ROS connection, run `roswtf`:
 
-`$ roswtf`
+`roswtf`
 
 ----------------------
 
@@ -155,7 +167,7 @@ and validation results.
 
 ## Lane Following Demo
 
-After the Duckiebot has been calibrated, you can launch the Lane Following Demo:
+After the Duckiebot has been calibrated, you can now launch the [Lane Following Demo](http://docs.duckietown.org/opmanual_duckiebot/out/demo_lane_following.html):
 
 ```
 docker -H <DUCKIEBOT_NAME>.local run -it --name lanefollowing-demo \
@@ -188,7 +200,7 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
   * https://hub.docker.com/r/duckietown/rpi-simple-server/
 
 * Duckiebot ROS containers
-  * Base ROS container - base ROS container (does NOT have `picamera`); opens bash shell when launched
+  * Base ROS container - base ROS container (does NOT have `picamera`); opens `bash` when launched
     * https://github.com/duckietown/rpi-ros-kinetic-base
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-base
   * Base ROS container with development tools & Duckietown dependencies (includes `picamera`)
@@ -196,7 +208,7 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
   * `roscore` container - starts `roscore` when launched
     * https://github.com/duckietown/rpi-ros-kinetic-roscore
     * https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
-  * Duckietown Base (monolithic) software container - opens bash shell when launched
+  * Duckietown Base (monolithic) software container - opens `bash` when launched
     * https://github.com/duckietown/Software
     * https://hub.docker.com/r/duckietown/rpi-duckiebot-base
 
@@ -214,9 +226,11 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
 
 * Desktop ROS containers
   * rosindustrial/ros-robot-nvidia:kinetic
-    * https://hub.docker.com/r/rosindustrial/ros-robot-nvidia/
     * https://github.com/ros-industrial/docker
+    * https://hub.docker.com/r/rosindustrial/ros-robot-nvidia/
   * osrf/ros:kinetic-desktop-full
+    * https://github.com/osrf/docker_images/blob/master/ros/kinetic/ubuntu/xenial/desktop-full/
+    * https://hub.docker.com/r/osrf/ros/
 
 # TODO:
 
