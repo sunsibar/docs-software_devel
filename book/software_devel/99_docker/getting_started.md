@@ -83,7 +83,9 @@ Save the file and unmount the drive, then insert the SD card into the Raspberry 
 
 ## Testing the camera 
 
-1. Open Portainer Web interface and run the `duckietown/rpi-docker-python-picamera` container. Publish port 8080 and ensure that the container is run in "Privileged" mode.
+Open Portainer Web interface and run the `duckietown/rpi-docker-python-picamera` container. 
+
+Publish port 8080 and ensure that the container is run in "Privileged" mode.
 
 <figure>
  <img src="pics/picam-container.png"/>
@@ -102,7 +104,7 @@ Note: The syntax `-H ![DUCKIEBOT_NAME].local` may be omitted if you are running 
 
 Note: adding the `-v /data:/data` option would persist the captured image on the Duckiebot's SD card.
 
-2. Go to the following URL: `http://![DUCKIEBOT_NAME].local:8080/image.jpg`
+Go to the following URL: `http://![DUCKIEBOT_NAME].local:8080/image.jpg`
 
 ## Running Simple HTTP File Server
 

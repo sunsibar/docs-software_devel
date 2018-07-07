@@ -1,4 +1,4 @@
-# Intro to Docker for Robotics and Machine Learning {#docker-intro status=beta}
+# Introduction to Docker {#docker-intro status=beta}
 
 <img src="pics/docker_logo.png" id="docker_logo"/>
 
