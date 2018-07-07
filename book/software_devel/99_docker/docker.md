@@ -1,10 +1,12 @@
-# Intro to Docker for Robotics and Machine Learning
+# Intro to Docker for Robotics and Machine Learning {#docker-intro status=beta}
 
 ![](https://user-images.githubusercontent.com/175716/40453381-034becbe-5eb3-11e8-9cbf-53507b165d02.png)
 
 ## Docker is a tool for portable, reproducible computing
- 
-It would be nice to give a computer - any computer with an internet connection - a short string of ASCII characters (say via a keyboard), press enter, and return to see some program running. Forget about where the program was built or what software you happened to be running at the time (this can be checked, and we can fetch the necessary dependencies). Sounds simple, right? In fact, this is an engineering task that has taken thousands of the world’s brightest developers many decades to implement. Thanks to the magic of [container technology](https://en.wikipedia.org/wiki/Operating-system-level_virtualization) we now can run any Linux program on almost any networked device on the planet, as is. All of the environment preparation, installation and configuration steps can be automated from start to finish. Depending on how much network bandwidth you have, it might take a while, but that’s all right. All you need to do is type the string correctly.
+
+It would be nice to give a computer - any computer with an internet connection - a short string of ASCII characters (say via a keyboard), press enter, and return to see some program running. Forget about where the program was built or what software you happened to be running at the time (this can be checked, and we can fetch the necessary dependencies). Sounds simple, right? In fact, this is an engineering task that has taken thousands of the world’s brightest developers many decades to implement.
+
+Thanks to the magic of [container technology](https://en.wikipedia.org/wiki/Operating-system-level_virtualization) we now can run any Linux program on almost any networked device on the planet, as is. All of the environment preparation, installation and configuration steps can be automated from start to finish. Depending on how much network bandwidth you have, it might take a while, but that’s all right. All you need to do is type the string correctly.
 
 ## Docker containers are easy to install
 
@@ -17,7 +19,7 @@ curl -sSL https://get.docker.com/ | sh
 Now you have installed Docker! Suppose your friend, Daphne, has a Docker **container**. How can we run this container? Docker containers live inside **registries**, which are servers that host Docker images. A Docker **image** is basically a filesystem snapshot - a single file that contains everything you need to run her container.
 
 ![](https://user-images.githubusercontent.com/175716/40452992-bea258e2-5eb1-11e8-914d-0980524c7469.png)
-*Docker ships with a default registry, called the [Docker Hub](https://hub.docker.com/), a big server that is home to many useful repositories.* 
+*Docker ships with a default registry, called the [Docker Hub](https://hub.docker.com/), a big server that is home to many useful repositories.*
 
 You can fetch Daphne’s container by running the following command to pull it from her Docker Hub repository:
 
@@ -65,7 +67,7 @@ $ docker run -it daphne/duck bash
 This will launch Daphne’s container and drop us into a bash session within. Suppose we make a change to the Docker container like so:
 
 ```
-root@295fd7879184:/# touch new_file && ls
+root@295fd7879184:/# touch new_file &amp;&amp; ls
 total 0
 -rw-r--r-- 1 root root 0 May 21 20:52 new_file
 ```
@@ -77,7 +79,7 @@ root@295fd7879184:/# exit
 exit
 $ docker run -it daphne/duck bash
 root@18f13bb4571a:/# ls
-root@18f13bb4571a:/# touch new_file1 && ls
+root@18f13bb4571a:/# touch new_file1 &amp;&amp; ls
 total 0
 -rw-r--r-- 1 root root 0 May 21 21:32 new_file1
 ```
@@ -142,7 +144,7 @@ $ echo -e '
 FROM dapne/duck
 RUN touch new_file1   # new_file1 will be part of our snapshot
 CMD ls                # This will be run whenever the container is started
-' >> Dockerfile
+' &gt;&gt; Dockerfile
 ```
 
 Now, to build the image we can simply run:
@@ -172,7 +174,7 @@ Docker has a concept of [layers](https://docs.docker.com/storage/storagedriver/#
 ```
 FROM dapne/duck                             # Defines the base container
 RUN touch new_file1                         # Defines a new layer
-RUN mkdir config && mv new_file1 mkdir      # Each layer can have multiple commands
+RUN mkdir config &amp;&amp; mv new_file1 mkdir      # Each layer can have multiple commands
 RUN curl -sSL https://get.your.app/ | sh    # Layers can have a script
 ```
 
