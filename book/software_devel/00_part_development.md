@@ -1,4 +1,4 @@
-# Software development guide {#book:sw-development status=draft}
+# Software development guide {#book:sw-development status=ready}
 
 Maintainer: Andrea Censi
 
