@@ -122,7 +122,7 @@ Note: make sure that the `picam` container is stopped. Alternative, you can use 
     -v /data:/data \
     -p 8080:8090 duckietown/rpi-simple-server
 
-TODO: Utilize external storage device in keeping with [configuration DB17-d](+opmanual_duckiebot#duckiebot_configurations).
+TODO: Utilize external storage device in keeping with [configuration DB17-d](+opmanual_duckiebot#duckiebot-configurations).
 
 ## Testing ROS
 
@@ -177,7 +177,7 @@ $ docker -H ![DUCKIEBOT].local run -d --name joystick-demo \
 
 ## Calibration
 
-As described in [](+opmanual_duckiebot#camera_calib), print the calibration pattern and place the Duckiebot in the proper position.
+As described in [](+opmanual_duckiebot#camera-calib), print the calibration pattern and place the Duckiebot in the proper position.
 
 ### Extrinsic calibration procedure
 
@@ -199,7 +199,7 @@ Note: You can run/launch the `rpi-simple-server` to see the results in your web 
 
 ## Lane Following Demo
 
-After the Duckiebot has been calibrated, you can now launch the [Lane Following Demo](+opmanual_duckiebot#demo_lane_following).
+After the Duckiebot has been calibrated, you can now launch the [Lane Following Demo](+opmanual_duckiebot#demo-lane-following).
 
 
     $ docker -H ![DUCKIEBOT_NAME].local run -it --name lanefollowing-demo \
