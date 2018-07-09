@@ -36,7 +36,7 @@ To interact with the Duckiebot, the computer must have the following software:
 
 Place the Duckiebot's SD card into the MicroSD card adapter, insert it into the computer and run the following command:
 
-    $ sh -c "$(wget -O- h.ndan.co)"
+    $ bash -c "$(wget -O- h.ndan.co)"
 
 The above command runs the [`flash-hypriot.sh` script](https://raw.githubusercontent.com/rusi/duckietown.dev.land/master/assets/flash-hypriot.sh).
 
