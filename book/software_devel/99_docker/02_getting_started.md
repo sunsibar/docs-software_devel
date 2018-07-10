@@ -38,7 +38,7 @@ Place the Duckiebot's SD card into the MicroSD card adapter, insert it into the 
 
     $ bash -c "$(wget -O- h.ndan.co)"
 
-The above command runs the [`flash-hypriot.sh` script](https://raw.githubusercontent.com/rusi/duckietown.dev.land/master/assets/flash-hypriot.sh).
+The above command runs the [`flash-hypriot.sh` script](https://github.com/duckietown/scripts/blob/master/docs/DuckieOS1-RPI3Bp.sh).
 
 This will download and run an installer to prepare the SD card.
 
@@ -227,10 +227,10 @@ Pressing `L1` puts the Duckiebot back in `manual` mode.
 
 ## Resources and References
 
-SC Card Configuration and Flashing script
+SD Card Configuration and Flashing script
 
-* https://github.com/rusi/duckietown.dev.land/tree/master/assets
-* https://raw.githubusercontent.com/rusi/duckietown.dev.land/master/assets/flash-hypriot.sh
+* https://github.com/duckietown/scripts
+* https://github.com/duckietown/scripts/blob/master/docs/DuckieOS1-RPI3Bp.sh
 
 RPi Camera Test container
 
