@@ -1,7 +1,7 @@
 # Duckiebot Development using Docker {status=ready}
 
 
-<style> 
+<style>
 figure img {
 max-width: 100%;
 }
@@ -71,6 +71,8 @@ If you prefer the command line, you can also connect to the Duckiebot via secure
 
     $ ssh ![USER_NAME]@![DUCKIEBOT_NAME].local
 
+Note: Any Docker command can also be run remotely by using the hostname flag, `-H ![DUCKIEBOT_NAME]`. You should not need to open an SSH connection simply to run a Docker command.
+
 ## Changing WIFI Access Point and PSK
 
 Insert the Duckiebot's Micro SD card into the adapter and insert it into the computer.
@@ -81,9 +83,9 @@ Open the `/media/![USER]/root/etc/wpa_supplicant/wpa_supplicant.conf` file and u
 
 Save the file and unmount the drive, then insert the SD card into the Raspberry Pi and power on the Duckiebot.
 
-## Testing the camera 
+## Testing the camera
 
-Open Portainer Web interface and run the `duckietown/rpi-docker-python-picamera` container. 
+Open Portainer Web interface and run the `duckietown/rpi-docker-python-picamera` container.
 
 Publish port 8080 and ensure that the container is run in "Privileged" mode.
 
@@ -92,17 +94,13 @@ Publish port 8080 and ensure that the container is run in "Privileged" mode.
  <figcaption>Portainer PiCam Demo</figcaption>
 </figure>
 
-
-Alternatively, run via the command line:
-
-
     $ docker -H ![DUCKIEBOT_NAME].local run -d --name picam \
       -v /data:/data \
       --privileged -p 8080:8080 duckietown/rpi-docker-python-picamera
 
 Note: The syntax `-H ![DUCKIEBOT_NAME].local` may be omitted if you are running the command over SSH.
 
-Note: adding the `-v /data:/data` option would persist the captured image on the Duckiebot's SD card.
+Note: Adding the `-v /data:/data` option would persist the captured image on the Duckiebot's SD card.
 
 Go to the following URL: `http://![DUCKIEBOT_NAME].local:8080/image.jpg`
 
@@ -116,7 +114,7 @@ All persistent data is stored under `/data` on the Duckiebot SD card. To access 
 
 Go to the following URL: `http://![DUCKIEBOT_NAME].local:8080/`
 
-Note: make sure that the `picam` container is stopped. Alternative, you can use a different port:
+Note: Make sure that the `picam` container is stopped. Alternatively, you can use a different port:
 
     $ docker -H ![DUCKIEBOT_NAME].local run -d --name file-server \
     -v /data:/data \
@@ -154,7 +152,7 @@ $ nvidia-docker run -it --rm --name ros \
   rosindustrial/ros-robot-nvidia:kinetic
 ```
 
-To allow incoming X connections, run `xhost +` on your computer. 
+To allow incoming X connections, run `xhost +` on your computer.
 
 Note: There is a [more secure way](http://wiki.ros.org/docker/Tutorials/GUI#The_safer_way) to do this, if you are concerned about receiving arbitrary X11 connections.
 
@@ -282,7 +280,7 @@ Desktop ROS containers
 * rosindustrial/ros-robot-nvidia:kinetic
     * https://github.com/ros-industrial/docker
     * https://hub.docker.com/r/rosindustrial/ros-robot-nvidia/
-* osrf/ros:kinetic-desktop-full 
+* osrf/ros:kinetic-desktop-full
     * https://github.com/osrf/docker_images/blob/master/ros/kinetic/ubuntu/xenial/desktop-full/
     * https://hub.docker.com/r/osrf/ros/
 
@@ -312,4 +310,4 @@ $ docker save ![TAG_NAME] | ssh -C duckie@![DUCKIEBOT_NAME].local docker load
 <figure markdown="1">
  <img src="pics/rqt_graph_joystick.png"/>
  <figcaption> Output of `rqt_graph joystick` (runtime dependencies)</figcaption>
-</figure> 
+</figure>
