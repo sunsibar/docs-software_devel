@@ -25,7 +25,7 @@ Let's say you have never used Docker. To get Docker, run this command on a POSIX
 $ curl -sSL https://get.docker.com/ | sh
 ```
 
-Now you have installed Docker! 
+Now you have installed Docker!
 
 Suppose your friend, Daphne, has a Docker **container**. How can we run this container? Docker containers live inside **registries**, which are servers that host Docker images. A Docker **image** is basically a filesystem snapshot---a single file that contains everything you need to run her container.
 
@@ -73,7 +73,7 @@ Note how Daphne's container has a container ID, a base image, and a funny-lookin
 
 ## Containers come from other containers
 
-So you have a terminal and an internet connection? Now it doesn't matter what operating system you're running. You can run almost any Linux program in the world with just a few keystrokes. No further steps are necessary. How neat is that? To have a tool that clones a program and its environment, fetches the appropriate dependencies, and runs it on any OS is a big timesaver. Suppose you have a program that runs on one computer. It is extremely likely to run on any other, regardless of the underlying OS or hardware. 
+So you have a terminal and an internet connection? Now it doesn't matter what operating system you're running. You can run almost any Linux program in the world with just a few keystrokes. No further steps are necessary. How neat is that? To have a tool that clones a program and its environment, fetches the appropriate dependencies, and runs it on any OS is a big timesaver. Suppose you have a program that runs on one computer. It is extremely likely to run on any other, regardless of the underlying OS or hardware.
 
 But how do you create a Docker **image**? There are two ways. You can either snapshot a running Docker container, or you can write a plaintext recipe. First, let's see how to create a snapshot:
 
@@ -104,7 +104,7 @@ And run:
     total 0
     -rw-r--r-- 1 root root 0 May 21 21:32 new_file1
 
-It seems like `new_file` has disappeared! Notice how the container ID (`18f13bb4571a`) is now different. This is because `docker run daphne/duck` created a new container from the image `daphne/duck`, rather than restarting our old container. 
+It seems like `new_file` has disappeared! Notice how the container ID (`18f13bb4571a`) is now different. This is because `docker run daphne/duck` created a new container from the image `daphne/duck`, rather than restarting our old container.
 
 Let's see all the containers on our machine:
 
@@ -116,7 +116,7 @@ CONTAINER ID     IMAGE           ...     STATUS                              NAM
 52994ef22481     daphne/duck     ...     Up 10 minutes                       happy_hamster
 ```
 
-It looks like `295fd7879184` a.k.a. `merry_manatee` survived, but it is no longer running. Whenever a container's main process (recall we ran `merry_manatee` with `bash`) finishes, the container will stop, but it will not cease to exist. 
+It looks like `295fd7879184` a.k.a. `merry_manatee` survived, but it is no longer running. Whenever a container's main process (recall we ran `merry_manatee` with `bash`) finishes, the container will stop, but it will not cease to exist.
 
 In fact, we can resume the stopped container right where we left off:
 
@@ -161,20 +161,24 @@ This is a convenient way to share an image with others. Anyone with access to th
 
 ## Containers come from recipes
 
-The second way to create a Docker image is to write a recipe, called a `Dockerfile`. A `Dockerfile` is a text file that specifies the commands required to create a Docker image, typically by modifying an existing container image using a scripting interface. They also have [special keywords](https://docs.docker.com/engine/reference/builder) (which are always CAPITALIZED), like [`FROM`](https://docs.docker.com/engine/reference/builder/#from), [`RUN`](https://docs.docker.com/engine/reference/builder/#run), [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) and so on. For example:
+The second way to create a Docker image is to write a recipe, called a `Dockerfile`. A `Dockerfile` is a text file that specifies the commands required to create a Docker image, typically by modifying an existing container image using a scripting interface. They also have [special keywords](https://docs.docker.com/engine/reference/builder) (which are always CAPITALIZED), like [`FROM`](https://docs.docker.com/engine/reference/builder/#from), [`RUN`](https://docs.docker.com/engine/reference/builder/#run), [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) and so on. For example, create
+a file called `Dockerfile` with the following content:
 
 ```
-$ echo -e '
 FROM dapne/duck
 RUN touch new_file1   # new_file1 will be part of our snapshot
 CMD ls -l             # Default command to be run when the container is started
-' >> Dockerfile
 ```
 
 Now, to build the image we can simply run:
 
 ```
-$ docker build -t your/duck:v3 . # Where '.' is the directory containing your Dockerfile
+$ docker build -t your/duck:v3 .       # Where '.' is the directory containing your Dockerfile
+```
+
+You should see something like:
+
+```
 Sending build context to Docker daemon  2.048kB
 Step 1/3 : FROM daphne/duck
  ---> ea2f90g8de9e
@@ -186,6 +190,12 @@ Removing intermediate container 14f834yud59
  ---> 05a3bd381fc2
 Successfully built 05a3bd381fc2
 Successfully tagged your/duck:v3
+```
+
+If you now run the command `docker images` in your terminal, you should see an image called `your/duck` with
+tag `v3`. For example:
+
+```
 $ docker images
 REPOSITORY    TAG        IMAGE ID         CREATED          SIZE
 daphne/duck   latest     ea2f90g8de9e     1 day ago        869MB
@@ -226,7 +236,7 @@ We can also chain `Dockerfile`s together using a technique called [*multi-stage 
 Now let's build and run this image:
 
 ```
-$ docker build . -t your/duck:v4 
+$ docker build . -t your/duck:v4
 Sending build context to Docker daemon  2.048kB
 Step 1/6 : FROM your/duck:v3 as template1
  ---> e3b75ef8ecc4
