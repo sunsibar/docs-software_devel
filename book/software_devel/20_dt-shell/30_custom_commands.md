@@ -9,7 +9,7 @@ If you want to contribute to the shell and create new commands, please follow th
 
 
 
-## Obtaining the commands {#dt-shell-pull-commands-repo}
+## Downloading the commands {#dt-shell-pull-commands-repo}
 
 You can download the source code of the commands by forking the `duckietown-shell-commands`
 repository and pulling your fork locally. The repository can be found at this
@@ -17,7 +17,7 @@ repository and pulling your fork locally. The repository can be found at this
 
 
 
-## Understand the structure of the repository {#dt-shell-understand-repo}
+## Understanding the structure of the repository {#dt-shell-understand-repo}
 
 Move to the directory where you pulled the commands repository. Run
 
@@ -66,7 +66,7 @@ A standard template file `__init__.py.template` that you can copy if you wish to
 is available in the main level of the repository.
 
 All the magic happens in the file `command.py`, where the logic of the command is implemented.
-If you want to learn more about how to create your own command, read the section ()[#dt-shell-create-custom-command].
+If you want to learn more about how to create your own command, read the section [](#dt-shell-create-custom-command).
 
 This is all you need to know about the structure of the repository.
 
@@ -93,20 +93,26 @@ the following structure
 You can copy the files `__init__.py.template` and `command.py.template` that you find on the main level of
 the repo into your new command directory renaming them as `__init__.py` and `command.py` respectively.
 
-This is enough to get your new command in `dt-shell`. Launch `dt-shell` and run `dt> mycommand`. You should
-see something like the following
+This is enough to get your new command in `dt-shell`. Launch `dt-shell` and run
+
+    $ dt> mycommand
+
+You should be able to see something like the following
 
 ```
 dt> mycommand
-You called the "test" command, level 0, with arguments []
+You called the "mycommand" command, level 0, with arguments []
 ```
 
-You can pass arguments to your command. For example, by running `dt> mycommand --arg1 value1`, the shell will
-return
+You can pass arguments to your command. For example, by running
+
+    $ dt> mycommand --arg1 value1
+
+the shell will return
 
 ```
 dt> mycommand
-You called the "test" command, level 0, with arguments ['--arg1', 'value1']
+You called the "mycommand" command, level 0, with arguments ['--arg1', 'value1']
 ```
 
 When the user types in the command `mycommand` and presses <kbd>Enter</kbd>, the file `./![mycommand]/command.py`
@@ -156,7 +162,7 @@ class DTCommand(DTCommandAbs):
 ```
 
 You can find the same template in the file `command.py.template` in the main level of the repository.
-You can recognize the default message printed above by the method `command()` of the command `![mycommand]`.
+You can recognize the default message printed above by the method `command(shell, args)` of the command `![mycommand]`.
 
 The method `command(shell, args)` is invoked by the object `shell` when the user presses <kbd>Enter</kbd>
 and submits the argument `args` to the command. The argument `shell` is the instance of DTShell hosting this
@@ -164,7 +170,7 @@ command, while `args` is the list of arguments passed to the command.
 
 The method `complete(shell, word, line)` is invoked by the object `shell` when the user presses <kbd>Tab</kbd>
 and requests auto-complete. This method should return a list of strings, with each string being a suggestion
-to complete the command.
+for completing the command.
 
 
 ## Update an existing command {#dt-shell-edit-command}
