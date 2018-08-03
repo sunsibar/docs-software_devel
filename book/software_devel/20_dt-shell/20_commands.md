@@ -11,7 +11,7 @@ installed.
 
 ## List commands
 
-You can list all the set of commands available in dt-shell by running
+You can list all the commands available in dt-shell by running
 
     $ dt> commands [--core] [--installed] [--installable]
 
