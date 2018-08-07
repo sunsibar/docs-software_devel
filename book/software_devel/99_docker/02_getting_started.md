@@ -32,6 +32,7 @@ To interact with the Duckiebot, the computer must have the following software:
 
     * `wget`
     * `apt-get`
+    * [`duckietown-shell`](https://github.com/duckietown/duckietown-shell)
     * Docker (See [](#docker-intro) for installation instructions)
 
 Place the Duckiebot's SD card into the MicroSD card adapter, insert it into the computer and run the following command:
