@@ -168,7 +168,7 @@ $ echo -e '
 FROM dapne/duck
 RUN touch new_file1   # new_file1 will be part of our snapshot
 CMD ls -l             # Default command to be run when the container is started
-' >> Dockerfile
+' > Dockerfile
 ```
 
 Now, to build the image we can simply run:
