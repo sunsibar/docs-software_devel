@@ -1,4 +1,4 @@
-# Introduction to Docker {#docker-intro status=beta}
+# Introduction to Docker for Robotics and Machine Learning {#docker-intro status=beta}
 
 <img src="pics/docker_logo.png" id="docker_logo"/>
 
@@ -259,8 +259,46 @@ total 0
 
 Why would you want to use this feature? For example, one application of multi-stage builds is compiling a dependency from its source code. In addition to all the source code, the compilation itself could have separate build dependencies and setup requirements, all of which are quite incidental to our ultimate goal - to build a single file. If we're especially unlucky, we might end up with gigabytes of transitive dependencies to build a tiny binary, and waste a lot of disk space or time cleaning up this mess. Multi-stage builds allow us to build the file, discard the unnecessary layers, copy it to a fresh layer, and move on with our life, unburdened by intermediate dependencies.
 
-## Docker is not a silver bullet for removing complexity
+## Docker is not a silver bullet for complexity
 
-When creating a new image, it may be tempting to reinvent the wheel. Your application is special, and has special requirements. But there are millions of Docker images in the wild. Unless you are doing something very special indeed, it's best to keep things simple. Find a base image that accomplishes the most of what you are trying to achieve, and build on top of it. Base images like [Ubuntu](https://hub.docker.com/_/ubuntu/) (or the very popular [Alpine Linux](https://hub.docker.com/_/alpine/), due to its small footprint), are okay, but there is almost certainly something more germane to your application's requirements. Even the `python` base image can be fairly generic.
+When creating a new image, it may be tempting to reinvent the wheel. Your application is special, and has special requirements. But there are millions of Docker images in the wild. Unless you are doing something very special indeed, it's best to keep things simple. Find a base image that accomplishes the most of what you are trying to achieve, and build on top of it. Base images like [Ubuntu](https://hub.docker.com/_/ubuntu/) (or the very popular [Alpine Linux](https://hub.docker.com/_/alpine/), due to its small footprint), are okay, but there is probably something more germane to your application's requirements. Even the `python` base image can be fairly generic, there are many images that contain specific Python stacks.
 
-It may also be tempting to use some random image you found on Docker Hub, which does exactly what you want. Congratulations! Maybe this is the case. But unless you are doing something very similar, it probably does some extra things that are inefficient, or even harmful to your application. If it provides a `Dockerfile`, inspect it first and see what's inside. Maybe you can adapt the `Dockerfile` to suit your needs and get rid of a lot of complexity. Try to find a happy medium between simplicity and balancing your image on a [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) Docker engine that works. It may work, but will not save you any headache in the long run.
+It may also be tempting to use some random image you found on Docker Hub, which does exactly what you want. Congratulations! Maybe this is the case. But unless you are doing something very similar, it probably does some extra things that are inefficient, or even harmful to your application. If it provides a `Dockerfile`, inspect it first and see what's inside. Maybe you can adapt the `Dockerfile` to suit your needs and get rid of a lot of complexity. Try to find a happy medium between simplification and creating a [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) image stack. It may work, but will not save you any headache in the long run. The best Docker images are often provided by the maintainer of your library or dependency.
+
+## Useful Docker resources
+
+We have found the following resources helpful for robotics and Machine Learning:
+
+### [Resin](https://hub.docker.com/r/resin/)
+
+Resin.io is a very good resource for base images on the ARM platform. The best part of Resin base images, is that you can build them on x86 devices. To do so, use the `Dockerfile` template below:
+
+```
+FROM resin/<BASE_IMAGE> # e.g. raspberrypi3-python
+
+RUN [ "cross-build-start" ]
+
+# Your code goes here...
+
+RUN [ "cross-build-end" ]
+
+CMD <DEFAULT_START_COMMAND>
+```
+
+The method used for cross building images is described in this article, which you can adapt for non-Resin-based images.
+
+### [ROS](https://hub.docker.com/_/ros/)
+
+ROS.org builds nightly ARM and x86 images for robotics development. For each distro, there are packages like `core`, `base`, `perception` (including OpenCV), `robot` (for the robot) and others.
+
+### [Hypriot](https://blog.hypriot.com/)
+
+Hypriot, a base OS for RPi and other ARM devices, includes Docker pre-installed. Hypriot is lightweight, fast, and builds the latest RPi Linux kernels and Raspbian releases.
+
+### [PiWheels](https://www.piwheels.org/)
+
+Not all Python packages (especially if they wrap a native library) can be run on all platforms. You might be tempted to build some package from its sources, and in rare cases, you may need to do so. But there is a good chance that your favorite Python library is compiled for Raspberry Pi on PiWheels.
+
+```
+pip install opencv-python opencv-contrib-python --index-url https://www.piwheels.org/simple
+```
