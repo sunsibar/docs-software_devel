@@ -48,14 +48,14 @@ Now you have Daphne's Docker image. To see a list of Docker images on your machi
 $ docker images
 ```
 
-Every image has a image ID, a name and a tag:
+Every image has an image ID, a name and a tag:
 
 ```
 REPOSITORY      TAG        IMAGE ID         CREATED       SIZE
 daphne/duck     latest     ea2f90g8de9e     1 day ago     869MB
 ```
 
-To run a Docker container, type the name of the container, like so:
+To run a Docker container, type the repository name, like so:
 
 ```
 $ docker run daphne/duck
@@ -69,7 +69,7 @@ CONTAINER ID     IMAGE           ...     NAMES
 52994ef22481     daphne/duck     ...     happy_hamster
 ```
 
-Note how Daphne's duck container has a *container ID*, a base image, and a funny-looking name, `happy_hamster`. You can use this name as an alias for the container ID.
+Note how Daphne's duck container has a *container ID*, a base image, and a funny-looking name, `happy_hamster`. This name is an alias for the container ID.
 
 ## Containers come from other containers
 
@@ -143,7 +143,7 @@ Now suppose we would like to share the container `shady_giraffe` with someone el
 $ docker commit -m "fork Daphne's duck" shady_giraffe your/duck:v2
 ```
 
-Wherever you see a funny-looking name like `shady_giraffe` in Docker, this is just another way to reference the container. We either can use the container ID, `18f13bb4571a` or the designated name (ie. `shady_giraffe`). The above `your` can be your username or an organization you belong to on a Docker registry. This image will be called `your/duck`, and has an optional version identifier, `v2`. Now we can push it to the registry:
+Wherever you see a funny-looking name like `shady_giraffe` in Docker, this is just another way to reference the container. We either can use the container ID, `18f13bb4571a` or the designated name (ie. `shady_giraffe`). The above `your` can be your username or an organization you belong to on a Docker registry. This image repository will be called `your/duck`, and has an optional version identifier, `v2`. Now we can push it to the Docker Hub registry:
 
 ```
 $ docker push your/duck:v2
@@ -157,12 +157,11 @@ total 0
 -rw-r--r-- 1 root root 0 May 21 21:32 new_file1
 ```
 
-This is a convenient way to share an image with colleagues and collaborators. Anyone with access to the repository can pull our image and continue right where we left off, or create another image based on our own. Images can be created via the command line or by using something called a `Dockerfile`.
+This is a convenient way to share an image with your colleagues and collaborators. Anyone with access to the repository can pull our image and continue right where we left off, or create another image based on our own. Images can be created via the command line or by using something called a `Dockerfile`.
 
 ## Containers come from recipes
 
-The second way to create a Docker image is to write a recipe, called a `Dockerfile`. A `Dockerfile` is a text file that specifies the commands required to create a Docker image, typically by modifying an existing container image using a scripting interface. They also have [special keywords](https://docs.docker.com/engine/reference/builder) (which are always CAPITALIZED), like [`FROM`](https://docs.docker.com/engine/reference/builder/#from), [`RUN`](https://docs.docker.com/engine/reference/builder/#run), [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) and so on. For example, create
-a file called `Dockerfile` with the following content:
+The second way to create a Docker image is to write a recipe, called a `Dockerfile`. A `Dockerfile` is a text file that specifies the commands required to create a Docker image, typically by modifying an existing container image using a scripting interface. They also have [special keywords](https://docs.docker.com/engine/reference/builder) (which are always CAPITALIZED), like [`FROM`](https://docs.docker.com/engine/reference/builder/#from), [`RUN`](https://docs.docker.com/engine/reference/builder/#run), [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) and so on. For example, create a file called `Dockerfile` with the following content:
 
 ```
 FROM dapne/duck
@@ -192,8 +191,7 @@ Successfully built 05a3bd381fc2
 Successfully tagged your/duck:v3
 ```
 
-If you now run the command `docker images` in your terminal, you should see an image called `your/duck` with
-tag `v3`. For example:
+Now run the command `docker images` in your terminal, and you should see an image called `your/duck` with tag `v3`:
 
 ```
 $ docker images
@@ -203,7 +201,7 @@ your/duck     v2         d78be5cf073e     5 minutes ago    869MB
 your/duck     v3         05a3bd381fc2     2 seconds ago    869MB
 ```
 
-This procedure is identical to the snapshot method we performed earlier, except the result is much cleaner. Now, instead of needing to carry around a 869MB BLOB, we can just store the 4KB text file and may rest assured that all our important setup commands are contained within. Similar to before, we can simply run:
+This procedure is identical to the snapshot method we performed earlier, but the result is much cleaner. Now, instead of needing to carry around a 869MB BLOB, we can just store the 4KB text file and rest assured that all our important setup commands are contained within. Similar to before, we can simply run:
 
 ```
 $ docker run -it your/duck:v3
@@ -213,16 +211,16 @@ total 0
 
 Notice that as soon as we run the container, Docker will execute the `ls -l` command as specified by the `Dockerfile`, revealing `new_file1` was stored in the image. However we can still override `ls -l` by passing a command line argument: `docker run -it your/duck:v3 [custom_command]`.
 
-Docker uses a concept of [*layers*](https://docs.docker.com/storage/storagedriver/#images-and-layers). Every instruction we add to the Dockerfile beginning with a Dockerfile keyword will add a new layer, which is conveniently cached by the [Docker daemon](https://docs.docker.com/engine/reference/commandline/dockerd/). If we should modify a Dockerfile, Docker will only need to rebuild the image starting from the first modified instruction. Let's have a look:
+Docker uses a concept of [*layers*](https://docs.docker.com/storage/storagedriver/#images-and-layers). Every instruction we add to the `Dockerfile` beginning with a [keyword](https://docs.docker.com/engine/reference/builder/#from) will create a new layer, which is conveniently cached by the [Docker daemon](https://docs.docker.com/engine/reference/commandline/dockerd/). If we should modify a Dockerfile, Docker will only need to rebuild the image starting from the first modified instruction. Let's have a look:
 
     FROM dapne/duck                             # Defines the base container
     RUN touch new_file1                         # Defines a new layer
     RUN mkdir config && mv new_file1 mkdir      # Each layer can have multiple commands
     RUN curl -sSL https://get.your.app/ | sh    # Layers can have a script
 
-Suppose we make a change at the bottom of our Dockerfile. If Docker had to rerun the entire recipe from top to bottom to every time we wanted to build the image, this would be terribly slow and inconvenient. Fortunately, Docker is smart enough to cache the layers which have not changed, and only rerun the minimum set of commands to rebuild our image. This is a very nice feature, however it can sometimes introduce unexpected results, especially when the cache is stale. To ignore the cache and force a clean rebuild of a docker image, use `docker build --no-cache`.
+Suppose we make a change at the bottom of our `Dockerfile`. If Docker had to rerun the entire recipe from top to bottom to every time we wanted to build the image, this would be terribly slow and inconvenient. Fortunately, Docker is smart enough to cache the layers which have not changed, and only rerun the minimum set of commands to rebuild our image. This is a very nice feature, however it can sometimes introduce unexpected results, especially when the cache is stale. To ignore the cache and force a clean rebuild, use `docker build --no-cache`.
 
-We can also chain `Dockerfile`s together using a technique called [*multi-stage builds*](https://docs.docker.com/develop/develop-images/multistage-build/). These allow you to build multiple images into one `Dockerfile`, and copy resources from one image to another:
+We can also chain `Dockerfile`s together using a technique called [*multi-stage builds*](https://docs.docker.com/develop/develop-images/multistage-build/). These allow you to build multiple images into one `Dockerfile`, and copy resources from one to another:
 
     FROM your/duck:v3 as template1              # We can use `template1` as an alias later
 
@@ -259,4 +257,10 @@ total 0
 -rw-r--r-- 1 root root 0 Jul  8 15:06 new_file3
 ```
 
-Why would you want this feature? For example, one application of multi-stage builds, might be compiling a dependency from its source code. In addition to all the source code, the compilation itself has separate build dependencies and setup requirements. All of this is quite superfluous to our end goal, which is to build a single file. If we're unlucky, we might have gigabytes of transitive dependencies to build our tiny image, and spend a lot of effort to clean up the mess afterwards. With multi-stage builds, we can build the file, discard the intermediate layers and move on with our life, unburdened by intermediate dependencies.
+Why would you want to use this feature? For example, one application of multi-stage builds is compiling a dependency from its source code. In addition to all the source code, the compilation itself could have separate build dependencies and setup requirements, all of which are quite incidental to our ultimate goal - to build a single file. If we're especially unlucky, we might end up with gigabytes of transitive dependencies to build a tiny binary, and waste a lot of disk space or time cleaning up this mess. Multi-stage builds allow us to build the file, discard the unnecessary layers, copy it to a fresh layer, and move on with our life, unburdened by intermediate dependencies.
+
+## Docker is not a silver bullet for removing complexity
+
+When creating a new image, it may be tempting to reinvent the wheel. Your application is special, and has special requirements. But there are millions of Docker images in the wild. Unless you are doing something very special indeed, it's best to keep things simple. Find a base image that accomplishes the most of what you are trying to achieve, and build on top of it. Base images like [Ubuntu](https://hub.docker.com/_/ubuntu/) (or the very popular [Alpine Linux](https://hub.docker.com/_/alpine/), due to its small footprint), are okay, but there is almost certainly something more germane to your application's requirements. Even the `python` base image can be fairly generic.
+
+It may also be tempting to use some random image you found on Docker Hub, which does exactly what you want. Congratulations! Maybe this is the case. But unless you are doing something very similar, it probably does some extra things that are inefficient, or even harmful to your application. If it provides a `Dockerfile`, inspect it first and see what's inside. Maybe you can adapt the `Dockerfile` to suit your needs and get rid of a lot of complexity. Try to find a happy medium between simplicity and balancing your image on a [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) Docker engine that works. It may work, but will not save you any headache in the long run.
