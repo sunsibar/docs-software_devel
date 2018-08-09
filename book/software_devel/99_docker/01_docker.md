@@ -261,7 +261,7 @@ Why would you want to use this feature? For example, one application of multi-st
 
 ## Docker is not a silver bullet for complexity
 
-When creating a new image, it may be tempting to reinvent the wheel. Your application is special, and has special requirements. But there are millions of Docker images in the wild. Unless you are doing something very special indeed, it's best to keep things simple. Find a base image that accomplishes the most of what you are trying to achieve, and build on top of it. Base images like [Ubuntu](https://hub.docker.com/_/ubuntu/) (or the very popular [Alpine Linux](https://hub.docker.com/_/alpine/), due to its small footprint), are okay, but there is probably something more germane to your application's requirements. Even the `python` base image can be fairly generic, there are many images that contain specific Python stacks.
+When creating a new image, it may be tempting to reinvent the wheel. Your application is special, and has special requirements. But there are millions of Docker images in the wild. Unless you are doing something very special indeed, it's best to keep things simple. Find a base image that accomplishes the most of what you are trying to achieve, and build on top of it. Base images like [Ubuntu](https://hub.docker.com/_/ubuntu/) (or the very popular [Alpine Linux](https://hub.docker.com/_/alpine/), due to its small footprint), are okay, but there is probably something more specific to your application's requirements. Even the `python` base image can be fairly generic, there are many images that contain specific Python stacks.
 
 It may also be tempting to use some random image you found on Docker Hub, which does exactly what you want. Congratulations! Maybe this is the case. But unless you are doing something very similar, it probably does some extra things that are inefficient, or even harmful to your application. If it provides a `Dockerfile`, inspect it first and see what's inside. Maybe you can adapt the `Dockerfile` to suit your needs and get rid of a lot of complexity. Try to find a happy medium between simplification and creating a [Rube Goldberg](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) image stack. It may work, but will not save you any headache in the long run. The best Docker images are often provided by the maintainer of your library or dependency.
 
@@ -271,7 +271,7 @@ We have found the following resources helpful for robotics and Machine Learning:
 
 ### [Resin](https://hub.docker.com/r/resin/)
 
-Resin.io is a very good resource for base images on the ARM platform. The best part of Resin base images, is that you can build them on x86 devices. To do so, use the `Dockerfile` template below:
+Resin.io is a very good source of base images for ARM devices. The best part of using Resin base images, is that you can build them on x86 devices, such as your laptop or the cloud. Baked into every Resin image is a shim for the shell that will allow you to run ARM binaries on x86. To use this feature, you can adapt the `Dockerfile` template below:
 
 ```
 FROM resin/<BASE_IMAGE> # e.g. raspberrypi3-python
@@ -285,20 +285,51 @@ RUN [ "cross-build-end" ]
 CMD <DEFAULT_START_COMMAND>
 ```
 
-The method used for cross building images is described in this article, which you can adapt for non-Resin-based images.
+Resin uses [qemu](https://www.qemu.org/) to cross-build images as described in [this article](https://resin.io/blog/building-arm-containers-on-any-x86-machine-even-dockerhub/). Also described is how to build and run non-Resin-based ARM images on x86 devices. This technique is not just for building images - it also works at runtime! When running an ARM image, simply use the `qemu-arm-static` binary as an entrypoint to your launch command:
+
+`docker run --entrypoint=qemu-arm-static -it <your/arm-image> bash`
 
 ### [ROS](https://hub.docker.com/_/ros/)
 
 ROS.org builds nightly ARM and x86 images for robotics development. For each distro, there are packages like `core`, `base`, `perception` (including OpenCV), `robot` (for the robot) and others.
 
-### [Hypriot](https://blog.hypriot.com/)
+### [Hypriot](https://hypriot.com/)
 
-Hypriot, a base OS for RPi and other ARM devices, includes Docker pre-installed. Hypriot is lightweight, fast, and builds the latest RPi Linux kernels and Raspbian releases.
+Hypriot, a base OS for RPi and other ARM devices, include support for Docker out of the box. Hypriot is lightweight, fast, and builds the latest RPi Linux kernels and Raspbian releases.
 
 ### [PiWheels](https://www.piwheels.org/)
 
-Not all Python packages (especially if they wrap a native library) can be run on all platforms. You might be tempted to build some package from its sources, and in rare cases, you may need to do so. But there is a good chance that your favorite Python library is compiled for Raspberry Pi on PiWheels.
+Not all Python packages (especially if they wrap a native library) can be run on all platforms. You might be tempted to build some package from its sources (and in rare cases, you may need to do so). But there is a good chance your favorite Python library is is already compiled for Raspberry Pi on PiWheels. By running the following command (either in your `Dockerfile` or at runtime), you can install one of many Python packages, ie. `opencv-python`:
 
 ```
-pip install opencv-python opencv-contrib-python --index-url https://www.piwheels.org/simple
+pip install opencv-python --index-url https://www.piwheels.org/simple
 ```
+
+### [Graphical User Interfaces](http://wiki.ros.org/docker/Tutorials/GUI)
+
+Docker also supports GUIs, but you will need to configure X11 forwarding.
+
+### [Docker Hub](https://hub.docker.com/)
+
+Docker Hub is the central repository for Docker Images. Unless you have configured a separate registry, whenever you pull a Docker image tag, it will query the Docker Hub first. You can use the Docker Hub to upload Docker images, and configure automated builds from GitHub (with a 2-hour build timeout). Docker Hub does not support layer caching of any kind, so the build will always take a fixed amount of time.
+
+<figure id="docker_hub_autobuild" markdown="1">
+<img src="pics/docker_hub_autobuild.png.png"/>
+<figcaption>Docker Hub auto-builds allow you to link a <code>Dockerfile</code> in a GitHub repository, and whenever that <code>Dockerfile</code> changes, the Docker image will be updated.</figcaption>
+</figure>
+
+The Docker Hub also has features for configuring repository links and build triggers. These will automatically rebuild your Docker image when some event happens.
+
+<figure id="repository_links" markdown="1">
+<img src="pics/repository_links.png"/>
+<figcaption>Repository links allow you to chain builds together across Docker Hub repositories. Whenever a linked repository is updated, your image will be rebuilt.</figcaption>
+</figure>
+
+### [Docker Cloud](https://cloud.docker.com/)
+
+Docker Cloud is integrated with the Docker Hub (and may one day replace it), but currently has more features. Builds are automatically published from Docker Cloud to Docker Hub. Notifications for email and Slack, as well as a longer build timeout (up to 4-hours) are supported. It also has features for configuring the build context and other useful build settings, such as enabling caching (unlike Docker Hub).
+
+<figure id="docker_cloud_autobuild" markdown="1">
+<img src="pics/docker_cloud_autobuild.png"/>
+<figcaption>Docker Cloud allows a longer build timeout, and has more sophisticated build configuration features.</figcaption>
+</figure>
