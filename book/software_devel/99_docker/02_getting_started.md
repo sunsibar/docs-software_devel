@@ -1,5 +1,6 @@
 # Duckiebot Development using Docker {status=ready}
 
+The following section will guide you through the Docker development process.
 
 <style>
 figure img {
@@ -30,7 +31,7 @@ To interact with the Duckiebot, the computer must have the following software:
 
 * Software Prerequisites (Ubuntu/Debian):
 
-    * `wget`
+    * `wget`/`curl`
     * `apt-get`
     * [`duckietown-shell`](https://github.com/duckietown/duckietown-shell)
     * Docker (See [](#docker-intro) for installation instructions)
@@ -43,17 +44,15 @@ The above command runs the [`flash-hypriot.sh` script](https://github.com/duckie
 
 This will download and run an installer to prepare the SD card.
 
-Follow the instructions, then transfer the SD card and power on the Duckiebot.
+Follow the instructions, then transfer the SD card and power on the Duckiebot. Your laptop should be connected to the same network as the Duckiebot. Alternately, wait a while for the Duckiebot to start up and connect to the Duckiebot Access Point.
 
-Wait for a minute, then visit the following URL:
+Wait for a minute or so, and then visit the following URL:
 
 `http://![DUCKIEBOT_NAME].local:9000/`
 
-You should be greeted by the Portainer web interface.
+You should be greeted by the Portainer web interface. This user-friendly web interface is the primary mechanism for interacting with a Duckiebot.
 
-This user-friendly web interface is the primary mechanism for interacting with a Duckiebot.
-
-Here you can see the list of running containers on your machine:
+From here you can see the list of running containers on your Duckiebot:
 
 <figure>
  <img src="pics/portainer.png"/>
@@ -67,22 +66,19 @@ You can attach a console to a running container and interact with it via the bro
  <figcaption>Portainer Web Interface</figcaption>
 </figure>
 
-
-If you prefer the command line, you can also connect to the Duckiebot via secure shell:
+If you prefer to use the command line, you can also connect to the Duckiebot via secure shell:
 
     $ ssh ![USER_NAME]@![DUCKIEBOT_NAME].local
 
 Note: Any Docker command can also be run remotely by using the hostname flag, `-H ![DUCKIEBOT_NAME]`. You should not need to open an SSH connection simply to run a Docker command.
 
-## Changing WIFI Access Point and PSK
+## Changing the WiFi Access Point and PSK
 
-Insert the Duckiebot's Micro SD card into the adapter and insert it into the computer.
+Run the following command from your laptop to reconfigure the default WiFi credentials:
 
-The drive should be mounted under `/media/![USER]/root`.
-
-Open the `/media/![USER]/root/etc/wpa_supplicant/wpa_supplicant.conf` file and update the `ssid` and `psk` fields.
-
-Save the file and unmount the drive, then insert the SD card into the Raspberry Pi and power on the Duckiebot.
+    $ curl -w "\n" -d '{"ssid":"[WIFI_SSID]", "psk":"[PASSWORD]"}' \
+         -H "Content-Type: application/json" \
+         -X POST [DUCKIEBOT_NAME]:8080/connect
 
 ## Testing the camera
 
@@ -129,9 +125,7 @@ It is best to first pull the `base` Duckietown Docker image using the following 
 
     $ docker -H ![DUCKIEBOT_NAME].local pull duckietown/rpi-ros-kinetic-roscore
 
-
 Run the `base` Duckietown Docker image, opening a shell:
-
 
     $ docker -H ![DUCKIEBOT_NAME].local run -it --name roscore \
       --privileged \
@@ -141,17 +135,15 @@ Run the `base` Duckietown Docker image, opening a shell:
 
 You can start a ROS environment on your laptop, which connects to the Duckiebot ROS Master:
 
-```
-$ nvidia-docker run -it --rm --name ros \
-  --net host \
-  --env ROS_HOSTNAME=$HOSTNAME \
-  --env ROS_MASTER_URI=http://![DUCKIEBOT_IP]:11311 \
-  --env ROS_IP=![LAPTOP_IP] \
-  --env="DISPLAY" \
-  --env="QT_X11_NO_MITSHM=1" \
-  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"\
-  rosindustrial/ros-robot-nvidia:kinetic
-```
+    $ nvidia-docker run -it --rm --name ros \
+      --net host \
+      --env ROS_HOSTNAME=$HOSTNAME \
+      --env ROS_MASTER_URI=http://![DUCKIEBOT_IP]:11311 \
+      --env ROS_IP=![LAPTOP_IP] \
+      --env="DISPLAY" \
+      --env="QT_X11_NO_MITSHM=1" \
+      --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"\
+      rosindustrial/ros-robot-nvidia:kinetic
 
 To allow incoming X connections, run `xhost +` on your computer.
 
@@ -166,13 +158,11 @@ To test the ROS connection, run `roswtf`:
 
 ## Test ROS Joystick
 
-```
-$ docker -H ![DUCKIEBOT].local run -d --name joystick-demo \
-    --privileged \
-    -v /data:/data \
-    --net host \
-    duckietown/rpi-duckiebot-joystick-demo
-```
+    $ docker -H ![DUCKIEBOT].local run -d --name joystick-demo \
+        --privileged \
+        -v /data:/data \
+        --net host \
+        duckietown/rpi-duckiebot-joystick-demo
 
 ## Calibration
 
@@ -182,13 +172,11 @@ As described in [](+opmanual_duckiebot#camera-calib), print the calibration patt
 
 Launch the calibration container and follow the prompts:
 
-```
-$ docker -H ![DUCKIEBOT_NAME].local run -it --name calibration \
-  --privileged \
-  -v /data:/data \
-  --net host \
-  duckietown/rpi-duckiebot-calibration
-```
+    $ docker -H ![DUCKIEBOT_NAME].local run -it --name calibration \
+      --privileged \
+      -v /data:/data \
+      --net host \
+      duckietown/rpi-duckiebot-calibration
 
 You will first be asked to place the Duckiebot on the calibration pattern. Then you will be asked to place in a lane to test the calibration.
 
@@ -214,99 +202,95 @@ You can test the Duckiebot by using the Joystick. Pressing `R1` starts `autonomo
 
 Pressing `L1` puts the Duckiebot back in `manual` mode.
 
+## Resources and References
+
+### SD Card Configuration and Flashing script
+
+* https://github.com/duckietown/scripts
+* https://github.com/duckietown/scripts/blob/master/docs/DuckieOS1-RPI3Bp.sh
+
+### RPi Camera Test container
+
+* https://github.com/rusi/rpi-docker-python-picamera
+* https://hub.docker.com/r/duckietown/rpi-docker-python-picamera/
+
+### RPi Simple HTTP File Server
+
+* https://github.com/rusi/rpi-simple-server
+* https://hub.docker.com/r/duckietown/rpi-simple-server/
+
+## Duckiebot ROS containers
+
+The following containers are very useful for getting started.
+
+### Base ROS container; opens `bash` when launched
+
+* https://github.com/duckietown/rpi-ros-kinetic-base
+* https://hub.docker.com/r/duckietown/rpi-ros-kinetic-base
+
+### Base ROS container with development tools and Duckietown dependencies (includes `picamera`)
+
+* https://hub.docker.com/r/duckietown/rpi-ros-kinetic-dev
+
+### `roscore` container - starts `roscore` when launched
+
+* https://github.com/duckietown/rpi-ros-kinetic-roscore
+* https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
+
+### Duckietown Base (monolithic) software container - opens `bash` when launched
+
+* https://github.com/duckietown/Software
+* https://hub.docker.com/r/duckietown/rpi-duckiebot-base
+
+### Joystick Demo container
+
+* https://github.com/duckietown/rpi-duckiebot-joystick-demo
+* https://hub.docker.com/r/duckietown/rpi-duckiebot-joystick-demo
+
+### Calibration container
+
+* https://github.com/duckietown/rpi-duckiebot-calibration
+* https://hub.docker.com/r/duckietown/rpi-duckiebot-calibration
+
+### Lane Following Demo container
+
+* https://github.com/duckietown/rpi-duckiebot-lanefollowing-demo
+* https://hub.docker.com/r/duckietown/rpi-duckiebot-lanefollowing-demo
+
+### Desktop ROS containers
+
+rosindustrial/ros-robot-nvidia:kinetic
+
+* https://github.com/ros-industrial/docker
+* https://hub.docker.com/r/rosindustrial/ros-robot-nvidia/
+
+osrf/ros:kinetic-desktop-full
+
+* https://github.com/osrf/docker_images/blob/master/ros/kinetic/ubuntu/xenial/desktop-full/
+* https://hub.docker.com/r/osrf/ros/
 
 ## Docker Image Hierarchy
-
 
 <figure>
  <img src="pics/docker_diagram.svg"/>
  <figcaption>Docker Image Hierarchy</figcaption>
 </figure>
 
-
-## Resources and References
-
-SD Card Configuration and Flashing script
-
-* https://github.com/duckietown/scripts
-* https://github.com/duckietown/scripts/blob/master/docs/DuckieOS1-RPI3Bp.sh
-
-RPi Camera Test container
-
-* https://github.com/rusi/rpi-docker-python-picamera
-* https://hub.docker.com/r/duckietown/rpi-docker-python-picamera/
-
-RPi Simple HTTP File Server
-
-* https://github.com/rusi/rpi-simple-server
-* https://hub.docker.com/r/duckietown/rpi-simple-server/
-
-Duckiebot ROS containers:
-
-Base ROS container - base ROS container (does NOT have `picamera`); opens `bash` when launched
-
-* https://github.com/duckietown/rpi-ros-kinetic-base
-* https://hub.docker.com/r/duckietown/rpi-ros-kinetic-base
-
-Base ROS container with development tools and Duckietown dependencies (includes `picamera`)
-
-* https://hub.docker.com/r/duckietown/rpi-ros-kinetic-dev
-
-`roscore` container - starts `roscore` when launched
-
-* https://github.com/duckietown/rpi-ros-kinetic-roscore
-* https://hub.docker.com/r/duckietown/rpi-ros-kinetic-roscore
-
-Duckietown Base (monolithic) software container - opens `bash` when launched
-
-* https://github.com/duckietown/Software
-* https://hub.docker.com/r/duckietown/rpi-duckiebot-base
-
-Joystick Demo container
-
-* https://github.com/duckietown/rpi-duckiebot-joystick-demo
-* https://hub.docker.com/r/duckietown/rpi-duckiebot-joystick-demo
-
-Calibration container
-
-* https://github.com/duckietown/rpi-duckiebot-calibration
-* https://hub.docker.com/r/duckietown/rpi-duckiebot-calibration
-
-Lane Following Demo container
-
-* https://github.com/duckietown/rpi-duckiebot-lanefollowing-demo
-* https://hub.docker.com/r/duckietown/rpi-duckiebot-lanefollowing-demo
-
-Desktop ROS containers
-* rosindustrial/ros-robot-nvidia:kinetic
-    * https://github.com/ros-industrial/docker
-    * https://hub.docker.com/r/rosindustrial/ros-robot-nvidia/
-* osrf/ros:kinetic-desktop-full
-    * https://github.com/osrf/docker_images/blob/master/ros/kinetic/ubuntu/xenial/desktop-full/
-    * https://hub.docker.com/r/osrf/ros/
-
-
 ## Misc
 
 ### Building images:
 
-```
-$ cd image-builder-rpi
-$ docker build . --tag ![TAG_NAME]
-```
+    $ cd image-builder-rpi
+    $ docker build . --tag ![TAG_NAME]
 
 ### Transferring Docker containers
 
-```
-$ docker save ![TAG_NAME] | ssh -C duckie@![DUCKIEBOT_NAME].local docker load
-```
-
+    $ docker save ![TAG_NAME] | ssh -C duckie@![DUCKIEBOT_NAME].local docker load
 
 <figure markdown="1">
  <img src="pics/rqt_dep_joystick.png"/>
  <figcaption> Output of `rqt_dep joystick` (compilation dependencies)</figcaption>
 </figure>
-
 
 <figure markdown="1">
  <img src="pics/rqt_graph_joystick.png"/>
