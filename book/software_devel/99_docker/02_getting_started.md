@@ -39,12 +39,27 @@ To interact with the Duckiebot, the computer must have the following software:
 Place the Duckiebot's SD card into the MicroSD card adapter, insert it into the computer and run the following command:
 
     $ bash -c "$(wget -O- h.ndan.co)"
+    
+    
+TODO: Dt shell
+
+    $ dt flash dt18 
+    
+TODO: get token from website 
+
+    $ dt tok verify $TOKEN
+    
+    0 -> good   JSON {'uid': number, 'exp': date}
+    1 -> bad  error message
+     
 
 The above command runs the [`flash-hypriot.sh` script](https://github.com/duckietown/scripts/blob/master/docs/DuckieOS1-RPI3Bp.sh).
 
 This will download and run an installer to prepare the SD card.
 
 Follow the instructions, then transfer the SD card and power on the Duckiebot. Your laptop should be connected to the same network as the Duckiebot. Alternately, wait a while for the Duckiebot to start up and connect to the Duckiebot Access Point.
+
+TODO: give some sign of life, maybe LEDs. 
 
 Wait for a minute or so, and then visit the following URL:
 
