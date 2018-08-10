@@ -278,22 +278,22 @@ Docker also supports GUIs, but you will need to configure X11 forwarding.
 Docker Hub is the central repository for Docker Images. Unless you have configured a separate registry, whenever you pull a Docker image tag, it will query the Docker Hub first. You can use the Docker Hub to upload Docker images, and configure automated builds from GitHub (with a 2-hour build timeout). Docker Hub does not support layer caching of any kind, so the build will always take a fixed amount of time.
 
 <figure id="docker_hub_autobuild" markdown="1">
-<img src="pics/docker_hub_autobuild.png.png"/>
-<figcaption>Docker Hub auto-builds allow you to link a <code>Dockerfile</code> in a GitHub repository, and whenever that <code>Dockerfile</code> changes, the Docker image will be updated.</figcaption>
+  <img src="pics/docker_hub_autobuild.png.png"/>
+  <figcaption>Docker Hub auto-builds allow you to link a <code>Dockerfile</code> in a GitHub repository, and whenever that <code>Dockerfile</code> changes, the Docker image will be updated.</figcaption>
 </figure>
 
 The Docker Hub also has features for configuring repository links and build triggers. These will automatically rebuild your Docker image when some event happens.
 
 <figure id="repository_links" markdown="1">
-<img src="pics/repository_links.png"/>
-<figcaption>Repository links allow you to chain builds together across Docker Hub repositories. Whenever a linked repository is updated, your image will be rebuilt.</figcaption>
+  <img src="pics/repository_links.png"/>
+  <figcaption>Repository links allow you to chain builds together across Docker Hub repositories. Whenever a linked repository is updated, your image will be rebuilt.</figcaption>
 </figure>
 
 ### [Docker Cloud](https://cloud.docker.com/)
 
 Docker Cloud is integrated with the Docker Hub (and may one day replace it). Builds are automatically published from Docker Cloud to Docker Hub. Notifications for email and Slack, as well as a longer build timeout (up to 4-hours) are supported. It also has features for configuring the build context and other useful build settings, such as enabling caching (unlike Docker Hub).
 
-<figure id="docker_cloud_autobuild" markdown="1">
-<img src="pics/docker_cloud_autobuild.png"/>
-<figcaption>Docker Cloud allows a longer build timeout, and has more sophisticated build configuration features.</figcaption>
+<figure id="docker_cloud_autobuild">
+  <img src="pics/docker_cloud_autobuild.png"/>
+  <figcaption>Docker Cloud allows a longer build timeout, and has more sophisticated build configuration features.</figcaption>
 </figure>
