@@ -28,15 +28,14 @@ Now you have installed Docker!
 Suppose your friend, Daphne, has a Docker **container**. How can we run this container? Docker containers live inside **registries**, which are servers that host Docker images. A Docker **image** is basically a filesystem snapshot---a single file that contains everything you need to run her container.
 
 <figure id="docker_registry" markdown="1">
-<img src="pics/docker_registry.png"/>
-<figcaption>
-Docker ships with a default registry, called the <a href="https://hub.docker.com">Docker Hub</a>, a big server that is home to many useful repositories.
-</figcaption>
+  <img src="pics/docker_registry.png"/>
+  <figcaption>Docker ships with a default registry, called the <a href="https://hub.docker.com">Docker Hub</a>, a big server that is home to many useful repositories.
+  </figcaption>
 </figure>
 
 You can fetch Daphne's container by running the following command to pull it from her Docker Hub repository:
 
-$ docker pull daphne/duck
+    $ docker pull daphne/duck
 
 Now you have Daphne's Docker image. To see a list of Docker images on your machine, type:
 
@@ -151,13 +150,13 @@ You should see something like:
 
     Sending build context to Docker daemon  2.048kB
     Step 1/3 : FROM daphne/duck
-     ---> ea2f90g8de9e
+     --- ea2f90g8de9e
     Step 2/3 : RUN touch new_file1
-     ---> e3b75gt9zyc4
+     --- e3b75gt9zyc4
     Step 3/3 : CMD ls -l
-     ---> Running in 14f834yud59
+     --- Running in 14f834yud59
     Removing intermediate container 14f834yud59
-     ---> 05a3bd381fc2
+     --- 05a3bd381fc2
     Successfully built 05a3bd381fc2
     Successfully tagged your/duck:v3
 
@@ -202,9 +201,9 @@ Now let's build and run this image:
     $ docker build . -t your/duck:v4
     Sending build context to Docker daemon  2.048kB
     Step 1/6 : FROM your/duck:v3 as template1
-     ---> e3b75ef8ecc4
+     --- e3b75ef8ecc4
     Step 2/6 : FROM daphne/duck as template2
-     ---> ea2f90g8de9e
+     --- ea2f90g8de9e
     Step 3/6 : COPY --from=template1 new_file1 new_file2
      ---> 72b96668378e
     Step 4/6 : FROM donald/duck:v3 as template3
@@ -231,7 +230,7 @@ It may also be tempting to use some random image you found on Docker Hub, which 
 
 ## Running Docker remotely
 
-You can run Docker commands locally, or on a remote Docker Host. To do so, run the command `docker -H <REMOTE_HOST_NAME>`. You do not need to open a SSH session simply to run a Docker command.
+You can run Docker commands locally, or on a remote Docker Host. To do so, run the command `docker -H ![REMOTE_HOST_NAME]`. You do not need to open a SSH session simply to run a Docker command.
 
 ## Useful Docker resources
 
@@ -241,7 +240,7 @@ We have found the following resources helpful for robotics and Machine Learning:
 
 Resin.io is a very good source of base images for ARM devices. The best part of using Resin images, is that you can build them on x86 devices, such as your laptop or the cloud. Baked into every Resin image is a shim for the shell that will allow you to run ARM binaries on x86. To use this feature, you can adapt the `Dockerfile` template below:
 
-    FROM resin/<BASE_IMAGE> # e.g. raspberrypi3-python
+    FROM resin/![BASE_IMAGE] # e.g. raspberrypi3-python
 
     RUN [ "cross-build-start" ]
 
@@ -249,11 +248,11 @@ Resin.io is a very good source of base images for ARM devices. The best part of 
 
     RUN [ "cross-build-end" ]
 
-    CMD <DEFAULT_START_COMMAND>
+    CMD ![DEFAULT_START_COMMAND]
 
 Resin uses [qemu](https://www.qemu.org/) to cross-build images as described in [this article](https://resin.io/blog/building-arm-containers-on-any-x86-machine-even-dockerhub/). Also described is how to build and run non-Resin-based ARM images on x86 devices. This technique is not just for building images - it also works at runtime! When running an ARM image, simply use the `qemu-arm-static` binary as an entrypoint to your launch command:
 
-    docker run --entrypoint=qemu-arm-static -it <your/arm-image> bash
+    $ docker run --entrypoint=qemu-arm-static -it ![your/arm-image] bash
 
 ### [ROS](https://hub.docker.com/_/ros/)
 
@@ -267,7 +266,7 @@ Hypriot, a base OS for RPi and other ARM devices, include support for Docker out
 
 Not all Python packages (especially if they wrap a native library) can be run on all platforms. You might be tempted to build some package from its sources (and in rare cases, you may need to do so). But there is a good chance your favorite Python library is already compiled for Raspberry Pi on PiWheels. By running the following command (either in your `Dockerfile` or at runtime), you can install Python packages, e.g. `opencv-python`:
 
-    pip install opencv-python --index-url https://www.piwheels.org/simple
+    $ pip install opencv-python --index-url https://www.piwheels.org/simple
 
 ### [Graphical User Interfaces](http://wiki.ros.org/docker/Tutorials/GUI)
 
@@ -278,7 +277,7 @@ Docker also supports GUIs, but you will need to configure X11 forwarding.
 Docker Hub is the central repository for Docker Images. Unless you have configured a separate registry, whenever you pull a Docker image tag, it will query the Docker Hub first. You can use the Docker Hub to upload Docker images, and configure automated builds from GitHub (with a 2-hour build timeout). Docker Hub does not support layer caching of any kind, so the build will always take a fixed amount of time.
 
 <figure id="docker_hub_autobuild" markdown="1">
-  <img src="pics/docker_hub_autobuild.png.png"/>
+  <img src="pics/docker_hub_autobuild.png"/>
   <figcaption>Docker Hub auto-builds allow you to link a <code>Dockerfile</code> in a GitHub repository, and whenever that <code>Dockerfile</code> changes, the Docker image will be updated.</figcaption>
 </figure>
 
