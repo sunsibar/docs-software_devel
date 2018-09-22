@@ -21,20 +21,20 @@ You should see something like the following
 ```
 dt> commands
 Core commands:
-	commands
-	install
-	uninstall
-	update
-	version
-	exit
-	help
+    commands
+    install
+    uninstall
+    update
+    version
+    exit
+    help
 
 Installed commands:
-	<empty>
+    <empty>
 
 Installable commands:
-	aido18
-	logs
+    aido18
+    logs
 ```
 
 Use the arguments `--core`, `--installed`, and `--installable` to filter the commands.
