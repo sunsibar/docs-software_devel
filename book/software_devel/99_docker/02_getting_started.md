@@ -208,6 +208,12 @@ You can test the Duckiebot by using the Joystick. Pressing `R1` starts `autonomo
 
 Pressing `L1` puts the Duckiebot back in `manual` mode.
 
+## Common mistakes
+
+### exec user process caused "exec format error"
+
+If you encounter this error, this means the container you are attempting to run is based on an image that is not compatible with the host's architecture. If you are trying to run an ARM image on an x86 host, you will need to use [QEMU](https://www.qemu.org/) to emulate the ARM processor architecture. To run QEMU in Duckietown or Resin derived Docker image, use the flag `--entrypoint=qemu-arm-static` in your Docker run command. There is currently no solution for running x86 images on an ARM host, so you will need to build ARM-specific images for the Raspberry Pi.
+
 ## Resources and References
 
 ### SD Card Configuration and Flashing script
