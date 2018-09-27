@@ -4,7 +4,7 @@
 
 Requires: You have implemented a new feature or improved an existing feature in your branch `devel-![project_name]` 
 
-Requires: A robot that is configured and able to follow lanes in Duckietown according to instructions in [](+class_fall_2017#checkoff_navigation)
+Requires: A robot that is configured and able to follow lanes in Duckietown according to instructions in [](+fall2017_info#checkoff_navigation)
 
 Result: Your branch gets merged into `master` and doesn't break anything
 
@@ -44,7 +44,7 @@ If you have been doing your development on your laptop or some other computer, t
 
 ## Road Test
 
-Verify that the previous functionality of the robot is preserved. For now repeat the instructions in [](+class_fall_2017#checkoff_navigation), and ensure that the basic lane following and indefinite navigation abilities are preserved.
+Verify that the previous functionality of the robot is preserved. For now repeat the instructions in [](+fall2017_info#checkoff_navigation), and ensure that the basic lane following and indefinite navigation abilities are preserved.
 
 
 ## Make a Pull Request
