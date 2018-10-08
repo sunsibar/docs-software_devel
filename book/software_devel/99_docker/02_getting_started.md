@@ -114,6 +114,7 @@ Publish port 8081 and ensure that the container is run in "Privileged" mode.
       --name picam \
       -v /data:/data \
       --privileged \
+      -p 8081:8081 \
       duckietown/rpi-docker-python-picamera:master18
 
 
