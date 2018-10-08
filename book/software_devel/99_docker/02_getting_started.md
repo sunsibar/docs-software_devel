@@ -99,13 +99,9 @@ Publish port 8081 and ensure that the container is run in "Privileged" mode.
     $ docker -H ![DUCKIEBOT_NAME].local run -d \
       --name picam \
       -v /data:/data \
-<<<<<<< HEAD
-      --privileged -p 8081:8081 duckietown/rpi-docker-python-picamera:master18
-=======
       --privileged \
       -p 8081:8081 \
-      duckietown/rpi-docker-python-picamera
->>>>>>> 1801579a75551082d76593c2ecba021f0f8a8adb
+      duckietown/rpi-docker-python-picamera:master18
 
 Note: The syntax `-H ![DUCKIEBOT_NAME].local` may be omitted if you are running the command over SSH.
 
