@@ -85,6 +85,20 @@ If you prefer to use the command line, you can also connect to the Duckiebot via
 
 Note: Any Docker command can also be run remotely by using the hostname flag, `-H ![DUCKIEBOT_NAME]`. You should not need to open an SSH connection simply to run a Docker command.
 
+
+
+## Running Simple HTTP File Server
+
+All persistent data is stored under `/data` on the Duckiebot SD card. To access the data via the web browser, run:
+
+    $ docker -H ![DUCKEBOT_NAME].local run -d \
+      --name file-server \
+      -v /data:/data \ 
+      -p 8082:8082 \
+      duckietown/rpi-simple-server:master18 
+
+Go to the following URL: `http://![DUCKIEBOT_NAME].local:8082/`
+
 ## Testing the camera
 
 Open Portainer Web interface and run the `duckietown/rpi-docker-python-picamera` container.
@@ -99,31 +113,15 @@ Publish port 8081 and ensure that the container is run in "Privileged" mode.
     $ docker -H ![DUCKIEBOT_NAME].local run -d \
       --name picam \
       -v /data:/data \
-<<<<<<< HEAD
-      --privileged -p 8081:8081 duckietown/rpi-docker-python-picamera:master18
-=======
       --privileged \
-      -p 8081:8081 \
-      duckietown/rpi-docker-python-picamera
->>>>>>> 1801579a75551082d76593c2ecba021f0f8a8adb
+      duckietown/rpi-docker-python-picamera:master18
+
 
 Note: The syntax `-H ![DUCKIEBOT_NAME].local` may be omitted if you are running the command over SSH.
 
-Note: Adding the `-v /data:/data` option would persist the captured image on the Duckiebot's SD card.
 
-Visit the following URL: `http://![DUCKIEBOT_NAME].local:8081/image.jpg`
+Visit the following URL: `http://![DUCKIEBOT_NAME].local:8082/image.jpg`.
 
-## Running Simple HTTP File Server
-
-All persistent data is stored under `/data` on the Duckiebot SD card. To access the data via the web browser, run:
-
-    $ docker -H ![DUCKEBOT_NAME].local run -d \
-      --name file-server \
-      -v /data:/data \ 
-      -p 8082:8082 \
-      duckietown/rpi-simple-server:master18 
-
-Go to the following URL: `http://![DUCKIEBOT_NAME].local:8082/`
 
 ## Testing ROS
 
@@ -185,7 +183,7 @@ Launch the calibration container and follow the prompts:
       --privileged \
       -v /data:/data \
       --net host \
-      duckietown/rpi-duckiebot-calibration
+      duckietown/rpi-duckiebot-calibration:master18
 
 You will first be asked to place the Duckiebot on the calibration pattern. Then you will be asked to place in a lane to test the calibration.
 
@@ -203,7 +201,7 @@ After the Duckiebot has been calibrated, you can now launch the [Lane Following 
       --privileged \
       -v /data:/data \
       --net host \
-      duckietown/rpi-duckiebot-lanefollowing-demo
+      duckietown/rpi-duckiebot-lanefollowing-demo:master18
 
 
 Wait for a few minutes for all nodes to be started and initialized.
