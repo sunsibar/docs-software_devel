@@ -36,30 +36,28 @@ To interact with the Duckiebot, the computer must have the following software:
     * [`duckietown-shell`](https://github.com/duckietown/duckietown-shell)
     * Docker (See [](#docker-intro) for installation instructions)
 
-Place the Duckiebot's SD card into the MicroSD card adapter, insert it into the computer and run the following command:
+First, you will need to set your Duckietoken:
 
-    $ bash -c "$(wget -O- h.ndan.co)"
-    
-    
-TODO: Dt shell
+    $ dts tok set
 
-    $ dt flash dt18 
-    
-TODO: get token from website 
+Now, ensure that you have a valid Duckietoken:
 
-    $ dt tok verify $TOKEN
+    $ dts tok verify $TOKEN
     
     0 -> good   JSON {'uid': number, 'exp': date}
     1 -> bad  error message
-     
 
-The above command runs the [`flash-hypriot.sh` script](https://github.com/duckietown/scripts/blob/master/docs/DuckieOS1-RPI3Bp.sh).
+Place the Duckiebot's MicroSD card into the MicroSD card adapter, insert it into the computer and run the following command:
 
-This will download and run an installer to prepare the SD card.
+    $ dts init_sd_card     
 
-Follow the instructions, then transfer the SD card and power on the Duckiebot. Your laptop should be connected to the same network as the Duckiebot. Alternately, wait a while for the Duckiebot to start up and connect to the Duckiebot Access Point.
+The above command runs the [`init_sd_card.sh` script](https://github.com/duckietown/duckietown-shell-commands/blob/master/init_sd_card.scripts/init_sd_card.sh), which will run an installer to prepare the SD card.
+
+Follow the instructions, then transfer the SD card to the Raspberry Pi and power on the Duckiebot. On first boot, make sure the Raspberry Pi receives continuous power for at least five or ten minutes.
 
 TODO: give some sign of life, maybe LEDs. 
+
+Your laptop should be connected to the same network as the Duckiebot, or alternately, you will need to share internet from your laptop to your Duckiebot via an ethernet cable. Further details are described in the [Duckiebot networking](http://docs.duckietown.org/DT18/opmanual_duckiebot/out/duckiebot_network.html) chapter.
 
 Wait for a minute or so, and then visit the following URL:
 
@@ -87,14 +85,6 @@ If you prefer to use the command line, you can also connect to the Duckiebot via
 
 Note: Any Docker command can also be run remotely by using the hostname flag, `-H ![DUCKIEBOT_NAME]`. You should not need to open an SSH connection simply to run a Docker command.
 
-## Changing the WiFi Access Point and PSK
-
-Run the following command from your laptop to reconfigure the default WiFi credentials:
-
-    $ curl -w "\n" -d '{"ssid":"[WIFI_SSID]", "psk":"[PASSWORD]"}' \
-         -H "Content-Type: application/json" \
-         -X POST [DUCKIEBOT_NAME]:8080/connect
-
 ## Testing the camera
 
 Open Portainer Web interface and run the `duckietown/rpi-docker-python-picamera` container.
@@ -106,23 +96,32 @@ Publish port 8081 and ensure that the container is run in "Privileged" mode.
  <figcaption>Portainer PiCam Demo</figcaption>
 </figure>
 
-    $ docker -H ![DUCKIEBOT_NAME].local run -d --name picam \
+    $ docker -H ![DUCKIEBOT_NAME].local run -d \
+      --name picam \
       -v /data:/data \
+<<<<<<< HEAD
       --privileged -p 8081:8081 duckietown/rpi-docker-python-picamera:master18
+=======
+      --privileged \
+      -p 8081:8081 \
+      duckietown/rpi-docker-python-picamera
+>>>>>>> 1801579a75551082d76593c2ecba021f0f8a8adb
 
 Note: The syntax `-H ![DUCKIEBOT_NAME].local` may be omitted if you are running the command over SSH.
 
 Note: Adding the `-v /data:/data` option would persist the captured image on the Duckiebot's SD card.
 
-Go to the following URL: `http://![DUCKIEBOT_NAME].local:8081/image.jpg`
+Visit the following URL: `http://![DUCKIEBOT_NAME].local:8081/image.jpg`
 
 ## Running Simple HTTP File Server
 
 All persistent data is stored under `/data` on the Duckiebot SD card. To access the data via the web browser, run:
 
-    $ docker -H ![DUCKEBOT_NAME].local run -d --name file-server \
-      -v /data:/data \
-      -p 8082:8082 duckietown/rpi-simple-server:master18
+    $ docker -H ![DUCKEBOT_NAME].local run -d \
+      --name file-server \
+      -v /data:/data \ 
+      -p 8082:8082 \
+      duckietown/rpi-simple-server:master18 
 
 Go to the following URL: `http://![DUCKIEBOT_NAME].local:8082/`
 
@@ -134,14 +133,16 @@ It is best to first pull the `base` Duckietown Docker image using the following 
 
 Run the `base` Duckietown Docker image, opening a shell:
 
-    $ docker -H ![DUCKIEBOT_NAME].local run -it --name roscore \
+    $ docker -H ![DUCKIEBOT_NAME].local run -it \
+      --name roscore \
       --privileged \
       --net host \
       duckietown/rpi-ros-kinetic-roscore:master18
 
 You can start a ROS environment on your laptop, which connects to the Duckiebot ROS Master:
 
-    $ nvidia-docker run -it --rm --name ros \
+    $ nvidia-docker run -it --rm \
+      --name ros \
       --net host \
       --env ROS_HOSTNAME=$HOSTNAME \
       --env ROS_MASTER_URI=http://![DUCKIEBOT_IP]:11311 \
@@ -164,7 +165,8 @@ To test the ROS connection, run `roswtf`:
 
 ## Test ROS Joystick
 
-    $ docker -H ![DUCKIEBOT].local run -d --name joystick-demo \
+    $ docker -H ![DUCKIEBOT].local run -d \
+        --name joystick-demo \
         --privileged \
         -v /data:/data \
         --net host \
@@ -178,7 +180,8 @@ As described in [](+opmanual_duckiebot#camera-calib), print the calibration patt
 
 Launch the calibration container and follow the prompts:
 
-    $ docker -H ![DUCKIEBOT_NAME].local run -it --name calibration \
+    $ docker -H ![DUCKIEBOT_NAME].local run -it \
+      --name calibration \
       --privileged \
       -v /data:/data \
       --net host \
@@ -195,7 +198,8 @@ Note: You can run/launch the `rpi-simple-server` to see the results in your web 
 After the Duckiebot has been calibrated, you can now launch the [Lane Following Demo](+opmanual_duckiebot#demo-lane-following).
 
 
-    $ docker -H ![DUCKIEBOT_NAME].local run -it --name lanefollowing-demo \
+    $ docker -H ![DUCKIEBOT_NAME].local run -it \
+      --name lanefollowing-demo \
       --privileged \
       -v /data:/data \
       --net host \
@@ -207,6 +211,28 @@ Wait for a few minutes for all nodes to be started and initialized.
 You can test the Duckiebot by using the Joystick. Pressing `R1` starts `autonomous` mode.
 
 Pressing `L1` puts the Duckiebot back in `manual` mode.
+
+## Development workflow
+
+When developing Docker containers, there are two paths to deployment. You can write the `Dockerfile` on your laptop or an x86 machine, then build with the `RUN [ "cross-build-start" ]` and `RUN [ "cross-build-end" ]` commands. Once tested, you can deploy to the Duckiebot directly by running the following command:
+
+```
+laptop $ docker save ![TAG_NAME] | ssh -C duckie@![DUCKIEBOT_NAME].local docker load
+```
+
+Alternately, you can build directly on an ARM device by creating a file named `Dockerfile.arm` (the `.arm` extension is just for the reader's benefit), adding a base image and some build instructions, and running the command:
+
+```
+duckiebot $ docker build --file=[FILE PATH]/Dockerfile.arm --tag [TAG NAME] . # Where `.` is the build context path
+```
+
+Note that ARM-specific `Dockerfile`s, will not build on x86 machines, and will cause an error when building on Docker Hub. However once you have debugged the build process on ARM, you can port the entire build to run on x86 machines by enclosing the build with `RUN [ "cross-build-start" ]` and `RUN [ "cross-build-end" ]` instructions, after the `FROM` directive and before the `CMD` directive, as [seen here](https://github.com/duckietown/rpi-ros-kinetic-base/blob/241a08a6f1be203325fc66086fa3a04d521e6029/Dockerfile#L14:L92). Don't forget to publish to GitHub and set up a Docker Hub automatic rebuilds if you wish to automate the build.
+
+## Common mistakes
+
+### exec user process caused "exec format error"
+
+If you encounter this error, this means the container you are attempting to run is based on an image that is incompatible with the host's architecture. If you are trying to run an ARM image on an x86 host, you will need to use [QEMU](https://www.qemu.org/) to emulate the ARM processor architecture. To run QEMU in Duckietown or Resin derived Docker image, use the flag `--entrypoint=qemu-arm-static` in your Docker run command. There is currently no solution for running x86 images on an ARM host, so you will need to build ARM-specific images for the Raspberry Pi.
 
 ## Resources and References
 
