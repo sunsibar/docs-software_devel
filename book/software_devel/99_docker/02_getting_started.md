@@ -108,7 +108,7 @@ Publish port 8081 and ensure that the container is run in "Privileged" mode.
 
     $ docker -H ![DUCKIEBOT_NAME].local run -d --name picam \
       -v /data:/data \
-      --privileged -p 8081:8081 duckietown/rpi-docker-python-picamera
+      --privileged -p 8081:8081 duckietown/rpi-docker-python-picamera:master18
 
 Note: The syntax `-H ![DUCKIEBOT_NAME].local` may be omitted if you are running the command over SSH.
 
@@ -122,7 +122,7 @@ All persistent data is stored under `/data` on the Duckiebot SD card. To access 
 
     $ docker -H ![DUCKEBOT_NAME].local run -d --name file-server \
       -v /data:/data \
-      -p 8082:8082 duckietown/rpi-simple-server
+      -p 8082:8082 duckietown/rpi-simple-server:master18
 
 Go to the following URL: `http://![DUCKIEBOT_NAME].local:8082/`
 
@@ -130,14 +130,14 @@ Go to the following URL: `http://![DUCKIEBOT_NAME].local:8082/`
 
 It is best to first pull the `base` Duckietown Docker image using the following command:
 
-    $ docker -H ![DUCKIEBOT_NAME].local pull duckietown/rpi-ros-kinetic-roscore
+    $ docker -H ![DUCKIEBOT_NAME].local pull duckietown/rpi-ros-kinetic-roscore:master18
 
 Run the `base` Duckietown Docker image, opening a shell:
 
     $ docker -H ![DUCKIEBOT_NAME].local run -it --name roscore \
       --privileged \
       --net host \
-      duckietown/rpi-ros-kinetic-roscore
+      duckietown/rpi-ros-kinetic-roscore:master18
 
 You can start a ROS environment on your laptop, which connects to the Duckiebot ROS Master:
 
@@ -168,7 +168,7 @@ To test the ROS connection, run `roswtf`:
         --privileged \
         -v /data:/data \
         --net host \
-        duckietown/rpi-duckiebot-joystick-demo
+        duckietown/rpi-duckiebot-joystick-demo:master18
 
 ## Calibration
 
