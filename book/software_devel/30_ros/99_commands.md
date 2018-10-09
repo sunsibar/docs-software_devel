@@ -34,7 +34,7 @@ Here is an example graph.
 
 <style>
 #rqt_graph {
-width: 100em;
+width: 30em;
 }
 figure img {
 max-width: 100%;
