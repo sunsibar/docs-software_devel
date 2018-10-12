@@ -225,7 +225,11 @@ Alternately, you can build directly on an ARM device by creating a file named `D
 duckiebot $ docker build --file=[FILE PATH]/Dockerfile.arm --tag [TAG NAME] . # Where `.` is the build context path
 ```
 
-Note that ARM-specific `Dockerfile`s, will not build on x86 machines, and will cause an error when building on Docker Hub. However once you have debugged the build process on ARM, you can port the entire build to run on x86 machines by enclosing the build with `RUN [ "cross-build-start" ]` and `RUN [ "cross-build-end" ]` instructions, after the `FROM` directive and before the `CMD` directive, as [seen here](https://github.com/duckietown/rpi-ros-kinetic-base/blob/241a08a6f1be203325fc66086fa3a04d521e6029/Dockerfile#L14:L92). Don't forget to publish to GitHub and set up a Docker Hub automatic rebuilds if you wish to automate the build.
+Note that ARM-specific `Dockerfile`s will not build on non-Mac x86 machines, and attempting to build one will cause an error on Docker Hub. However, once you have debugged the `Dockerfile` on an ARM device, you can easily port the entire build to x86 by enclosing it with `RUN [ "cross-build-start" ]` and `RUN [ "cross-build-end" ]` instructions, after the `FROM` and before the `CMD` directive, as [seen here](https://github.com/duckietown/rpi-ros-kinetic-base/blob/241a08a6f1be203325fc66086fa3a04d521e6029/Dockerfile#L14:L92). Don't forget to publish to GitHub and set up a Docker Hub automatic rebuilds if you wish to automate the build.
+
+## Emulation
+
+All Duckietown Docker images contain an emulator called [QEMU](https://www.qemu.org/) - this allows us to run ARM images on x86 directly. To run a pure compute ROS node (i.e. one that does not require any camera or motor access) on a non-Mac x86 platform, you will need to provide a custom entrypoint to Docker when running the image. To do so, use the command `docker run ... --entrypoint=qemu3-arm-static ![YOUR_IMAGE] [RUN_COMMAND]`, where `RUN_COMMAND` may be a shell such as `/bin/bash` or another command such as `/bin/bash -c "roscore"`. The `qemu3-arm-static` entrypoint is provided by [duckietown/rpi-ros-kinetic-base](https://github.com/duckietown/rpi-ros-kinetic-base), and may be upated in the future.
 
 ## Common mistakes
 
