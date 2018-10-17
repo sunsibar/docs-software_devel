@@ -7,5 +7,5 @@ Rosbags are a system for logging data in ROS.
 
 ## Commands
 
-`rosbag record <topic names> -O bagname`
-`rosbag info`
+    $ rosbag record <topic names> -O bagname
+    $ rosbag info
