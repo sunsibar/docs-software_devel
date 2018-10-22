@@ -1,3 +1,5 @@
+# Git setup
+
 ## Installation
 
 The basic Git program is installed using
