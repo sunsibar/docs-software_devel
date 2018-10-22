@@ -1,4 +1,6 @@
-## Problem 1: https instead of ssh:
+# Github troubleshooting
+
+## Problem: https instead of ssh
 
 The symptom is:
 
@@ -25,7 +27,7 @@ Solution:
     $ git remote add origin git@github.com:duckietown/Software.git
 
 
-## Problem 2: `git push` complains about upstream
+## Problem: `git push` complains about upstream
 
 The symptom is:
 
