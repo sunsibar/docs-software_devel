@@ -73,13 +73,13 @@ The file [`package.xml`][package-xml] defines the meta-data of the package. Catk
 
 Pay attention to the following parts:
 
-`<name>` defines the name of the package. It must match the project name in `CMakeLists.txt`.
+<code>&lt;name&gt;</code> defines the name of the package. It must match the project name in `CMakeLists.txt`.
 
-`<description>` describes the package concisely.
+<code>&lt;description&gt;</code> describes the package concisely.
 
-`<maintainer>` names the maintainer.
+<code>&lt;maintainer&gt;</code> names the maintainer.
 
-`<build_depend>` and `<run_depend>`. The catkin packages this package depends on. This usually match the `find_package` in `CMakeLists.txt`.
+<code>&lt;build_depend&gt;</code> and <code>&lt;run_depend&gt;</code>. The catkin packages this package depends on. This usually match the `find_package` in `CMakeLists.txt`.
 
 
 ## `setup.py`
