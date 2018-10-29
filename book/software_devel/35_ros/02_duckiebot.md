@@ -2,7 +2,7 @@
 
 ## ROS Version
 
-The version of ROS we are running on the duckiebots is ROS Kinetic. The current long term service version is ROS Melodic however it is quite new and not as well documented as Kinetic which will be supported until April 2021. You can install Melodic on your personal laptop and will be able to communicate with the duckiebot but may have issues building the duckiebot software on your own laptop.
+The version of ROS we are running on the duckiebots is ROS Kinetic. The current long term service version is ROS Melodic however it is quite new and not as well documented as Kinetic which will still be supported until April 2021. If you install Melodic on your personal laptop you will be able to communicate with the duckiebot but you might have issues building the duckiebot software on your own laptop. ***Using Ubuntu 16 and ROS Kinetic is highly recommended***.
 
 ## ROS Installation
 

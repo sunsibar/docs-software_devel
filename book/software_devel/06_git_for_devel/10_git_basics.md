@@ -1,4 +1,4 @@
-# Github basics
+# Github basics {#git-basics status=ready}
 
 ## Github terms explained
 

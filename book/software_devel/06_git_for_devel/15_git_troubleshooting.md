@@ -1,4 +1,4 @@
-# Github troubleshooting
+# Github troubleshooting {#git-trouble status=ready}
 
 ## Problem: https instead of ssh
 

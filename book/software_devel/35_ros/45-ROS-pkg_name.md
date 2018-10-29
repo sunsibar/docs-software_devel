@@ -1,135 +1,61 @@
-# Minimal ROS node - `pkg_name` {#ros-python-howto status=beta}
+# Minimal ROS node - `pkg_name` {#ros-python-howto status=ready}
 
 Assigned: Andrea Censi
 
 This document outline the process of writing a ROS package and nodes in Python.
 
-[talker-py]: https://github.com/duckietown/Software/blob/master/catkin_ws/src/60-templates/pkg_name/src/talker.py
-[CMakeLists-txt]: https://github.com/duckietown/Software/blob/master/catkin_ws/src/60-templates/pkg_name/CMakeLists.txt
-[setup-py]: https://github.com/duckietown/Software/blob/master/catkin_ws/src/60-templates/pkg_name/setup.py
-[package-xml]: https://github.com/duckietown/Software/blob/master/catkin_ws/src/60-templates/pkg_name/package.xml
-[util-py]: https://github.com/duckietown/Software/blob/master/catkin_ws/src/60-templates/pkg_name/include/pkg_name/util.py
+[talker-py]: https://github.com/duckietown/Software/blob/master18/catkin_ws/src/60-templates/pkg_name/src/talker.py
+[CMakeLists-txt]: https://github.com/duckietown/Software/blob/master18/catkin_ws/src/60-templates/pkg_name/CMakeLists.txt
+[setup-py]: https://github.com/duckietown/Software/blob/master18/catkin_ws/src/60-templates/pkg_name/setup.py
+[package-xml]: https://github.com/duckietown/Software/blob/master18/catkin_ws/src/60-templates/pkg_name/package.xml
+[util-py]: https://github.com/duckietown/Software/blob/master18/catkin_ws/src/60-templates/pkg_name/include/pkg_name/util.py
 
 To follow along, it is recommend that you duplicate the `pkg_name` folder and edit the content of the files to make your own package.
 
-## The files in the package
+## Catkin Tools
 
-### `CMakeLists.txt`
+[Catkin tools](https://catkin-tools.readthedocs.io/en/latest/) is the recommended method for building workspaces. It let you use `catkin build` rather than `catkin build` as well as several other commands.
 
-We start with the file [`CMakeLists.txt`][CMakeLists-txt].
+## Node Structure
 
-Every ROS package needs a file `CMakeLists.txt`, even if you are just using Python code in your package.
+Best practice is to define a class which contains several member functions. You can bind those functions as callback functions when subscribing to topic or call on them when you want to publish something. You should also make use of timers rather than use while loops which block.
 
-See also: documentation about CMakeLists.txt XXX
+For example in joy_mapper the JoyMapper subscribes to the "joy" topic with callback function `cbJoy`.
 
-For a Python package, you only have to pay attention to the following parts.
+joy_mapper also uses a timer with callback `cbParamTimer` which is called every second to update parameters.
 
-The line:
-
-    project(pkg_name)
-
-defines the name of the project.
-
-The `find_package` lines:
-
-
-    find_package(catkin REQUIRED COMPONENTS
-      roscpp
-      rospy
-      duckietown_msgs # Every duckietown packages must use this.
-      std_msgs
-    )
-
-You will have to specify the packages on which your package is dependent.
-
-In Duckietown, most packages depend on `duckietown_msgs` to make use of the customized messages.
-
-The line:
-
-    catkin_python_setup()
-
-tells `catkin` to setup Python-related stuff for this package.
-
-See also: [ROS documentation about `setup.py`][setuppy]
-
-[setuppy]: http://docs.ros.org/api/catkin/html/user_guide/setup_dot_py.html
-
-### `package.xml`
-
-The file [`package.xml`][package-xml] defines the meta data of the package.
-
-Catkin makes use of it to flush out the dependency tree and figures out the order of compiling.
-
-Pay attention to the following parts.
-
-<code>&lt;name&gt;</code> defines the name of the package. It has to match the project name in `CMakeLists.txt`.
-
-<code>&lt;description&gt;</code> describes the package concisely.
-
-<code>&lt;maintainer&gt;</code> provides information of the maintainer.
-
-<code>&lt;build_depend&gt;</code> and <code>&lt;run_depend&gt;</code>. The catkin packages this package depends on. This usually match the `find_package` in `CMakeLists.txt`.
-
-### `setup.py`
-
-The file [`setup.py`][setup-py] configures the Python modules in this package.
-
-The part to pay attention to is
-
-    setup_args = generate_distutils_setup(
-        packages=['pkg_name'],
-        package_dir={'': 'include'},
-    )
-
-The `packages` parameter is set to a list of strings of the name of the folders inside the `include` folder.
-
-The convention is to set the folder name the same as the package name. Here it's the `include/pkg_name` folder.
-
-You should put ROS-independent and/or reusable module (for other packages) in the `include/pkg_name` folder.
-
-Python files in this folder (for example, the `util.py`) will be available to scripts in the `catkin` workspace (this package and other packages too).
-
-To use these modules from other packages, use:
-
-    from pkg_name.util import *
+Notice that the main function simply creates the rosnode, instantiates the JoyMapper class then calls rospy.spin() which keeps the process at that line until it is called to exit.
 
 
 ## Writing a node: `talker.py`
 
 Let's look at [`src/talker.py`][talker-py] as an example.
 
-ROS nodes are put under the `src` folder and they have to be made executable to function properly.
+ROS nodes are put under the `src` folder. They have to be made executable to function properly. You can make a file executable in terminal by running:
 
-See: You use `chmod` for this; see [](+software_reference#chmod).
+    laptop $ sudo chmod +x ![file_name]
 
-### Header
+
+## Header
 
 Header:
 
     #!/usr/bin/env python
-    import rospy
-    # Imports module. Not limited to modules in this package.
-    from pkg_name.util import HelloGoodbye
-    # Imports msg
+    import rospy    # Imports module. Not limited to modules in this package.
+    from pkg_name.util import HelloGoodbye    # Imports msg
     from std_msgs.msg import String
 
-The first line, `#!/usr/bin/env python`, specifies that the script is written in Python.
+The first line, `#!/usr/bin/env python`, specifies that the script is written in Python. Every ROS node in Python must start with this line.
 
-Every ROS node in Python must start with this line.
+The line `import rospy` imports the `rospy` module necessary for all ROS nodes in Python. While the line `from pkg_name.util import HelloGoodbye` imports the class `HelloGoodbye` defined in the file [`pkg_name/util.py`][util-py].
 
-The line `import rospy` imports the `rospy` module necessary for all ROS nodes in Python.
-
-The line `from pkg_name.util import HelloGoodbye` imports the class `HelloGoodbye` defined in the file [`pkg_name/util.py`][util-py].
-
-Note that you can also include modules provided by other packages, if you
-specify the dependency in `CMakeLists.txt` and `package.xml`.
+Note that you can also include modules provided by other packages, if you specify the dependency in `CMakeLists.txt` and `package.xml`.
 
 The line `from std_msgs.msg import String` imports the `String` message defined in the `std_msgs` package.
 
-Note that you can use `rosmsg show std_msgs/String `
-in a terminal to lookup the definition of `String.msg`.
+Note that you can use `rosmsg show std_msgs/String ` in a terminal to lookup the definition of `String.msg`.
 
-### Main
+## Main
 
 This is the main file:
 
@@ -201,7 +127,7 @@ We now discuss the `Talker` class in [`talker.py`][talker-py].
             rospy.loginfo("[%s] Shutting down." %(self.node_name))
  -->
 
-### Constructor
+## Constructor
 
 In the constructor, we have:
 
@@ -242,7 +168,7 @@ The line:
 
 defines a timer that calls the `self.cbTimer` function every `self.pub_timestep` seconds.
 
-### Timer callback
+## Timer callback
 
 Contents:
 
@@ -255,7 +181,7 @@ Contents:
 
 Everyt ime the timer ticks, a message is generated and published.
 
-### Subscriber callback
+## Subscriber callback
 
 Contents:
 
@@ -301,10 +227,10 @@ will have the same effect. This is redundant in this case but very useful when y
 
 ## Testing the node
 
-First of all, you have to `catkin_make` the package even if it only uses Python. `catkin` makes sure that the modules in the include folder and the messages are available to the whole workspace. You can do so by
+First of all, you have to `catkin build` the package even if it only uses Python. `catkin` makes sure that the modules in the include folder and the messages are available to the whole workspace. You can do so by
 
     $ cd ${DUCKIETOWN_ROOT}/catkin_ws
-    $ catkin_make
+    $ catkin build
 
 Ask ROS to re-index the packages so that you can auto-complete most things.
 
