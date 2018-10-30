@@ -138,7 +138,7 @@ This is a convenient way to share an image with your colleagues and collaborator
 
 The second way to create a Docker image is to write a recipe, called a `Dockerfile`. A `Dockerfile` is a text file that specifies the commands required to create a Docker image, typically by modifying an existing container image using a scripting interface. They also have [special keywords](https://docs.docker.com/engine/reference/builder) (which are always CAPITALIZED), like [`FROM`](https://docs.docker.com/engine/reference/builder/#from), [`RUN`](https://docs.docker.com/engine/reference/builder/#run), [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) and so on. For example, create a file called `Dockerfile` with the following content:
 
-    FROM dapne/duck
+    FROM daphne/duck       # Defines the base image
     RUN touch new_file1   # new_file1 will be part of our snapshot
     CMD ls -l             # Default command to be run when the container is started
 
@@ -176,16 +176,127 @@ This procedure is identical to the snapshot method we performed earlier, but the
 
 Notice that as soon as we run the container, Docker will execute the `ls -l` command as specified by the `Dockerfile`, revealing `new_file1` was stored in the image. However we can still override `ls -l` by passing a command line argument: `docker run -it your/duck:v3 [custom_command]`.
 
-Docker uses a concept of [*layers*](https://docs.docker.com/storage/storagedriver/#images-and-layers). Every instruction we add to the `Dockerfile` beginning with a [keyword](https://docs.docker.com/engine/reference/builder/#from) will create a new layer, which is conveniently cached by the [Docker daemon](https://docs.docker.com/engine/reference/commandline/dockerd/). If we should modify a Dockerfile, Docker will only need to rebuild the image starting from the first modified instruction. Let's have a look:
+### Layer Caching
 
-    FROM dapne/duck                             # Defines the base container
-    RUN touch new_file1                         # Defines a new layer
-    RUN mkdir config && mv new_file1 mkdir      # Each layer can have multiple commands
-    RUN curl -sSL https://get.your.app/ | sh    # Layers can have a script
+An important concept in Docker is the [*layers*](https://docs.docker.com/storage/storagedriver/#images-and-layers). One way to think of a layer is like a Git commit - a set of changes to a previous image or layer, identified by a hash code. In a `Dockerfile`, layers begins with a [keyword](https://docs.docker.com/engine/reference/builder/#from). Let's have a look:
 
-Suppose we make a change at the bottom of our `Dockerfile`. If Docker had to rerun the entire recipe from top to bottom to every time we wanted to build the image, this would be terribly slow and inconvenient. Fortunately, Docker is smart enough to cache the layers which have not changed, and only rerun the minimum set of commands to rebuild our image. This is a very nice feature, however it can sometimes introduce unexpected results, especially when the cache is stale. To ignore the cache and force a clean rebuild, use `docker build --no-cache`.
+    FROM daphne/duck
+    RUN touch new_file1                             # Defines a new layer
+    RUN mkdir config && mv new_file1 mkdir          # Each layer can have multiple commands
+    RUN apt-get update && apt-get install -y wget   # Install a dependency
+    RUN wget https://get.your.app/install.sh        # Download a script
+    RUN chmod +x install.sh && ./install.sh         # Run the script
 
-We can also chain `Dockerfile`s together using a technique called [*multi-stage builds*](https://docs.docker.com/develop/develop-images/multistage-build/). These allow you to build multiple images into one `Dockerfile`, and copy resources from one to another:
+To build this image, we can run the command `docker build -t your/duck:v4 .`:
+
+    Sending build context to Docker daemon  2.048kB
+    Step 1/6 : FROM daphne/duck
+     ---> cd6d8154f1e1
+    Step 2/6 : RUN touch new_file1
+     ---> Running in a88a5e9ab8d0
+    Removing intermediate container a88a5e9ab8d0
+     ---> 0473154b2004
+    Step 3/6 : RUN mkdir config && mv new_file1 mkdir
+     ---> Running in e4c4dd614bd4
+    Removing intermediate container e4c4dd614bd4
+     ---> 2201828019ff
+    Step 4/6 : RUN apt-get update && apt-get install -y wget
+     ---> Running in 8fb56ef38bc8
+    ...
+    Removing intermediate container 8fb56ef38bc8
+     ---> 3358ca1b8649
+    Step 5/6 : RUN wget https://get.your.app/install.sh
+     ---> Running in e8284ff4ec8b
+    --2018-10-30 06:47:57--  https://get.your.app/install.sh
+    ...
+    2018-10-30 06:47:57 (89.9 MB/s) - 'install.sh' saved [13847/13847]
+    Removing intermediate container e8284ff4ec8b
+     ---> 24a22dc2900a
+    Step 6/6 : RUN chmod +x install.sh && ./install.sh
+     ---> Running in 9526651fa492
+    # Executing install script, commit: 36b78b2
+    ...
+    Removing intermediate container 9526651fa492
+     ---> a8be23fea573
+    Successfully built a8be23fea573
+    Successfully tagged your/duck:v4
+
+Layers are conveniently cached by the [Docker daemon](https://docs.docker.com/engine/reference/commandline/dockerd/). If we run the same command again, Docker will use the cache insead of rebuilding the entire image:
+
+    Sending build context to Docker daemon  2.048kB
+    Step 1/6 : FROM daphne/duck
+     ---> cd6d8154f1e1
+    Step 2/6 : RUN touch new_file1
+     ---> Using cache
+     ---> 0473154b2004
+    ...
+    Step 6/6 : RUN chmod +x index.html && ./index.html
+     ---> Using cache
+     ---> a8be23fea573
+    Successfully built a8be23fea573
+    Successfully tagged your/duck:v4
+
+If we later make a change to the `Dockerfile`, Docker will only need to rebuild the image starting from the first modified instruction. Suppose we add the line `RUN echo "Change here!"` to the bottom of our `Dockerfile` and rebuild:
+
+    Sending build context to Docker daemon  2.048kB
+    ...
+    Step 6/7 : RUN chmod +x index.html && ./index.html
+     ---> Using cache
+     ---> a8be23fea573
+    Step 7/7 : RUN echo "Change here!"
+     ---> Running in 80fc5c402304
+    Change here!
+    Removing intermediate container 80fc5c402304
+     ---> c1ec64cef9c6
+    Successfully built c1ec64cef9c6
+    Successfully tagged your/duck:v4
+
+If Docker had to rerun the entire `Dockerfile` from top to bottom to every time we built an image, this would be terribly slow and inconvenient. Fortunately, Docker is smart enough to cache the layers which have not changed, and only rerun the minimum set of commands to rebuild our image. This is a very nice feature, however it can sometimes introduce unexpected results, especially when the cache is stale. To ignore the cache and force a clean rebuild, use the `--no-cache` flag.
+
+What does Docker consider when deciding whether to use the cache? First is the `Dockerfile` itself - when an instruction changes, it and any subsequent instructions will need to be rerun during a build. Docker must also consider the [build context](https://docs.docker.com/engine/reference/commandline/build/#extended-description). When we write `docker build -t ![TAG] .`, the `.` indicates the *context*, or path where the build should occur. Often, this path contains build artifacts. For example:
+
+    FROM daphne/duck
+    COPY duck.txt .
+    RUN cat duck.txt
+
+Now if we run the command `echo "Make way for duckies!" > duck.txt && docker build -t my/duck:v5 .`, this will create a new file `duck.txt` in your build directory, and we will copy that file into the Docker image, then print its contents:
+
+    Sending build context to Docker daemon  3.072kB
+    Step 1/3 : FROM daphne/duck
+     ---> cd6d8154f1e1
+    Step 2/3 : COPY duck.txt .
+     ---> e0e03d9e1791
+    Step 3/3 : RUN cat duck.txt
+     ---> Running in 590c5420ce29
+    Make way for duckies!
+    Removing intermediate container 590c5420ce29
+     ---> 1633e3e10bef
+    Successfully built 1633e3e10bef
+    Successfully tagged my/duck:v5
+    
+As long as the first three lines of the `Dockerfile` and `duck.txt` are not modified, these layers will be cached and Docker will not need to rebuild them. However if the contents of `duck.txt` are later modified, this will force a rebuild to occur. For example, if we run `echo "Thank you. Have a nice day!" >> duck.txt && docker build -t my/duck:v5 .`:
+
+    Sending build context to Docker daemon  3.072kB
+    Step 1/3 : FROM ubuntu
+     ---> cd6d8154f1e1
+    Step 2/3 : COPY duck.txt .
+     ---> f219efc150a5
+    Step 3/3 : RUN cat duck.txt
+     ---> Running in 7c6f5f8b73e9
+    Make way!
+    Thank you. Have a nice day!
+    Removing intermediate container 7c6f5f8b73e9
+     ---> e8a1db712aee
+    Successfully built e8a1db712aee
+    Successfully tagged my/duck:v5
+
+A common mistake when writing `Dockerfile`s is to `COPY` more than is necessary to perform the next build step. For example, if we write `COPY . .` at the beginning of the `Dockerfile`, then whenever a file in changed anywhere in the build context, this will trigger a rebuild of subsequent instructions which is not often what we want. If we are conservative and only `COPY` what we need, this is a more efficient use of the cache and our builds will complete much more quickly. A general rule of thumb is source code be copied after dependencies and before compilation.
+
+Like Git's `.gitignore`, Docker has a `.dockerignore` file. If we add a line to the `.dockerignore` file, then all paths matching this line in the build context will be ignored. Docker also accepts more sophisticated pattern matching features like regular expressions and negation. For more details, refer to the [Docker documentation](https://docs.docker.com/engine/reference/builder/#dockerignore-file).
+
+### Multi-stage builds
+
+Docker's filesystem is purely additive, so each layer will only increase the size of the final image. If you care about image size, it is often necessary to reduce the number of layers and tidy up unnecessary files. For example, when installing dependencies on Debian-based images, a common practice is to run `RUN apt-get update && apt-get install ... && rm -rf /var/lib/apt/lists/*`, ensuring the package list is not baked into the image (Docker will only checkpoint the layer after an instruction is complete). But often, you only care about a single artifact, although building it can take several steps. To avoid this dance of chaining together commands and removing the garbage in a single instruction, we can use a technique called [*multi-stage builds*](https://docs.docker.com/develop/develop-images/multistage-build/). These allow you to build sequential images inside a `Dockerfile`, and copy resources from one to another, discarding the rest:
 
     FROM your/duck:v3 as template1              # We can use `template1` as an alias later
 
