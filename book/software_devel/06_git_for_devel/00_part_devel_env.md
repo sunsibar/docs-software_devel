@@ -1,4 +1,4 @@
-# Git for development  {#part:git-devel status=draft}
+# Git for development  {#part:git-devel status=beta}
 
 This guide provides a basic overview on how do version control with git.
 
