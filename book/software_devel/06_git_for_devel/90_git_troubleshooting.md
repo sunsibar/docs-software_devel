@@ -1,4 +1,4 @@
-# Github troubleshooting
+# Github troubleshooting {#part:git-devel status=beta}
 
 ## Problem: https instead of ssh
 
