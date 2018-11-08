@@ -1,4 +1,4 @@
-# Github basics {#part:git-devel status=beta}
+# Github basics {#github-basics status=beta}
 
 ## Github terms explained
 

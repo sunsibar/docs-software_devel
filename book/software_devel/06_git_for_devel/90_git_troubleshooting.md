@@ -1,6 +1,6 @@
-# Github troubleshooting {#part:git-devel status=beta}
+# Github troubleshooting {#git-troubleshooting status=beta}
 
-## Problem: https instead of ssh
+## Problem: `https` instead of `ssh`
 
 The symptom is:
 
