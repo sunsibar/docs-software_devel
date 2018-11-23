@@ -320,7 +320,7 @@ osrf/ros:kinetic-desktop-full
 
 ### Transferring Docker containers
 
-    $ docker save ![TAG_NAME] | ssh -C duckie@![DUCKIEBOT_NAME].local docker load
+    $ docker save ![TAG_NAME] | gzip | ssh -C duckie@![DUCKIEBOT_NAME].local docker load
 
 <figure markdown="1">
  <img src="pics/rqt_dep_joystick.png"/>
