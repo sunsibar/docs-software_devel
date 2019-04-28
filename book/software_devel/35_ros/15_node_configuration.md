@@ -1,10 +1,8 @@
-# Node configuration mechanisms {#node-configuration status=draft}
+# Node configuration mechanisms {#node-configuration status=ready}
 
-Maintainer: Russell Buchanan
+# Code Structure {#ros-structure status=ready}
 
-# Code Structure {#ros-structure status=draft}
-
-Software development in ROS takes place in a root directory call a catkin workspace, usually called `catkin_ws`. Inside this directory is a `src` folder which contains all the packages. ROS is built be several packages which each perform a specific role such as defining rosnodes, actions or message definitions. 
+Software development in ROS takes place in a root directory call a catkin workspace, usually called `catkin_ws`. Inside this directory is a `src` folder which contains all the packages. ROS is built be several packages which each perform a specific role such as defining rosnodes, actions or message definitions.
 
 See [joy_mapper](https://github.com/duckietown/Software/tree/master18/catkin_ws/src/05-teleop/joy_mapper) as an example of a ROS package. It can be launched independently with
 

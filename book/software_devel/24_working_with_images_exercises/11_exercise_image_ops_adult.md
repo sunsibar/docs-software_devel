@@ -1,6 +1,6 @@
-# Exercise: Basic image operations, adult version  {#exercise-specifications status=beta}
+# Exercise: Basic image operations, adult version  {#exercise-specifications status=ready}
 
-Assigned: Andrea Daniele
+
 
 ## Skills learned
 
@@ -97,15 +97,15 @@ You can find them in the directory
 [`/exercises/dt-image-flip/image-ops-tester`](https://github.com/duckietown/duckuments/tree/master/exercises/dt-image-flip/image-ops-tester)
 in the [`duckietown/duckuments`](https://github.com/duckietown/duckuments) repository.
 
-The script called `image-ops-tester-good` tests your program in a situation in which we expect it to work properly. 
-The 3 “bad” test scripts (i.e., `image-ops-tester-bad1` through `image-ops-tester-bad3`) test your code in 
+The script called `image-ops-tester-good` tests your program in a situation in which we expect it to work properly.
+The 3 “bad” test scripts (i.e., `image-ops-tester-bad1` through `image-ops-tester-bad3`) test your code in
 situations in which we expect your program to complain in the proper way.
 
 Use them as follows:
 
     $ image-ops-tester-![scenario] ![candidate-program]
-    
-    
+
+
 Note: The tester scripts must be called from their own location. Make sure to change your working directory to
 `/exercises/dt-image-flip/image-ops-tester` before launching the tester scripts.
 

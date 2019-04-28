@@ -1,6 +1,6 @@
-# Exercise: Bag in, bag out {#exercise-bag-in-out status=beta}
+# Exercise: Bag in, bag out {#exercise-bag-in-out status=ready}
 
-Assigned: Andrea Daniele
+
 
 ## Skills learned
 

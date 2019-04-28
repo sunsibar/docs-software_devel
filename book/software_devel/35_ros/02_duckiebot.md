@@ -1,4 +1,4 @@
-# ROS on the Duckiebot {#ros-duckiebot status=draft}
+# ROS on the Duckiebot {#ros-duckiebot status=ready}
 
 ## ROS Version
 
@@ -21,4 +21,3 @@ Let's try to communicate with ROS master on our laptops. First we need to tell o
 	laptop $ export ROS_MASTER_URI=http://![hostname].local:11311/
 
 Keep in mind this variable setting will not persist if you close the terminal. One option is to put that line in your `.bashrc` or `.zshrc` but then you wont be able to connect to any ROS master on your machine unless you reset it.
-

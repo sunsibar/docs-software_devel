@@ -1,4 +1,4 @@
-# Creating unit tests with ROS {#creating-unit-tests status=draft}
+# Creating unit tests with ROS {#creating-unit-tests status=beta}
 
 
 

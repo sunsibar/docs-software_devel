@@ -1,6 +1,6 @@
-# Exercise: Live Instagram {#exercise-instagram-live status=beta}
+# Exercise: Live Instagram {#exercise-instagram-live status=ready}
 
-Assigned: Andrea Daniele
+
 
 ## Skills learned
 

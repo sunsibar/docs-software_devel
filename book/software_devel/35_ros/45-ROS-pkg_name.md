@@ -1,6 +1,6 @@
-# Minimal ROS node - `pkg_name` {#ros-python-howto status=beta}
+# Minimal ROS node - `pkg_name` {#ros-python-howto status=ready}
 
-Assigned: Andrea Censi
+
 
 This document outline the process of writing a ROS package and nodes in Python.
 

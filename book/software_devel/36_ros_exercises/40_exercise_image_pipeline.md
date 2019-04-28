@@ -1,7 +1,5 @@
 # Exercise: Augmented Reality {#exercise-augmented-reality status=ready}
 
-Assigned: Jonathan Michaux and Dzenan Lapandic
-
 ## Skills learned
 
 * Understanding of all the steps in the image pipeline.

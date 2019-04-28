@@ -1,8 +1,8 @@
-# Git for development  {#part:git-devel status=beta}
+# Git for development  {#part:git-devel status=ready}
 
 This guide provides a basic overview on how do version control with git.
 
-Assigned:  Andy
+
 
 ## Background reading
 

@@ -1,6 +1,6 @@
-# Bug squashing guide {#bug-squashing status=beta}
+# Bug squashing guide {#bug-squashing status=ready}
 
-This unit describes how to debug your programs. Do read this accurately top-to-bottom. 
+This unit describes how to debug your programs. Do read this accurately top-to-bottom.
 
 If you think this is too long and too verbose to read and you are in a hurry anyway: that is probably the attitude that introduced the bug.
 It might be programming is not for you.

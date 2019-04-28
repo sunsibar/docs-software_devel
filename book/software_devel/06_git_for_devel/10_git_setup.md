@@ -1,4 +1,4 @@
-# Git setup {#git-setup status=beta}
+# Git setup {#git-setup status=ready}
 
 ## Installation
 
