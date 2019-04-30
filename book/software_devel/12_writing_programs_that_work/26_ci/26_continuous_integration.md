@@ -107,7 +107,7 @@ If you see a message like "merge failed" ([](#merge-failed)), it probably means 
 
 # Continuous integration {#continuous-integration}
 
-Assigned: Andrea Censi
+
 
 ## Create a CircleCI account
 

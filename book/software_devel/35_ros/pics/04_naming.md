@@ -1,4 +1,4 @@
-# Naming Conventions {#ros-names status=draft}
+# Naming Conventions {#ros-names status=beta}
 
 
 ## Nodes

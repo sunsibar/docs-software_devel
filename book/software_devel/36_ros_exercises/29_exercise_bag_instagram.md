@@ -1,6 +1,6 @@
-# Exercise: Bag instagram {#exercise-bag-mirror status=beta}
+# Exercise: Bag instagram {#exercise-bag-mirror status=ready}
 
-Assigned: Andrea Daniele
+
 
 ## Instructions
 

@@ -1,3 +1,3 @@
-# Using Makefiles {#using-makefiles status=draft}
+# Using Makefiles {#using-makefiles status=beta}
 
-TODO: to write 
+TODO: to write

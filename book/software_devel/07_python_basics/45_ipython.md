@@ -1,4 +1,4 @@
-# IPython {#python-devel-ipython status=draft}
+# IPython {#python-devel-ipython status=beta}
 
 TODO: to write
 

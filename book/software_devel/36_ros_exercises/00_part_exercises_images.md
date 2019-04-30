@@ -1,4 +1,3 @@
-# ROS development basics - Exercises {#part:ros-exercises status=draft}
+# ROS development basics - Exercises {#part:ros-exercises status=beta}
 
 TODO: to write
-

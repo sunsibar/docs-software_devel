@@ -10,7 +10,7 @@ Never use tabs in Python files.
 The tab characters are evil in Python code. Please be *very* careful in changing them.
 
 Do *not* use a tool to do it (e.g. "Convert tabs to spaces"); it will get it wrong.
- 
+
 ### Spaces
 
 Indentation is 4 spaces.
@@ -51,7 +51,7 @@ Comments, better:
     # This is my long comment
     from std_msgs.msg import String
 
-## Logging {status=draft}
+## Logging {status=beta}
 
 <!--
 For logging, import this logger:
@@ -62,12 +62,12 @@ For logging, import this logger:
 TODO: to write
 
 
-## Exceptions {status=draft}
+## Exceptions {status=beta}
 
 TODO: to write
 
 
-## Script entry points {status=draft}
+## Script entry points {status=beta}
 
 
     def summary():

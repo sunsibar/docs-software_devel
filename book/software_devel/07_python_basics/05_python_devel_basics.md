@@ -1,4 +1,4 @@
-# Python {#python status=draft}
+# Python {#python status=beta}
 
 ## Background reading
 

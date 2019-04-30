@@ -1,4 +1,4 @@
-# Working with YAML files {#working-with-YAML-files status=draft}
+# Working with YAML files {#working-with-YAML-files status=beta}
 
 YAML files are useful for writing configuration files, and are used a lot
 in Duckietown.
@@ -16,4 +16,3 @@ TODO: to write
 TODO: the yaml library
 
 TODO: the ruamel.yaml library
- 

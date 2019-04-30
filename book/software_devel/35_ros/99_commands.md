@@ -1,4 +1,4 @@
-# Useful Commands {#ros-commands status=draft}
+# Useful Commands {#ros-commands status=ready}
 Here are just a few useful commands that can help with debugging
 
 

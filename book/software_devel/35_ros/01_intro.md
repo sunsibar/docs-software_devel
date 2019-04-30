@@ -1,6 +1,4 @@
-# Introduction to ROS {#ros-intro status=draft}
-
-Maintainer: Russell Buchanan
+# Introduction to ROS {#ros-intro status=ready}
 
 Robot Operating System (ROS) is an open-source framework for software development on robots. It is widely used research and industry and we use it for running our duckiebots.
 

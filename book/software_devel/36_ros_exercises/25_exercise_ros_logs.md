@@ -1,6 +1,6 @@
-# Exercise: Simple data analysis from a bag  {#exercise-bag-analysis status=beta}
+# Exercise: Simple data analysis from a bag  {#exercise-bag-analysis status=ready}
 
-Assigned: Andrea Daniele
+
 
 ## Skills learned
 

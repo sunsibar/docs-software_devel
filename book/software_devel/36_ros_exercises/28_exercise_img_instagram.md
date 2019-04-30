@@ -1,6 +1,6 @@
-# Exercise: Instagram filters  {#exercise-instagram status=beta}
+# Exercise: Instagram filters  {#exercise-instagram status=ready}
 
-Assigned: Andrea Daniele
+
 
 ## Skills learned
 

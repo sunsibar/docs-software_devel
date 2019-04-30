@@ -1,6 +1,6 @@
 # Exercise: Bag thumbnails  {#exercise-bag-images status=ready}
 
-Assigned: Andrea Daniele
+
 
 ## Skills learned
 

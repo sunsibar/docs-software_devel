@@ -1,3 +1,3 @@
-# Shells {#shells status=draft}
+# Shells {#shells status=beta}
 
 TODO: to write

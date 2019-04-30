@@ -1,4 +1,4 @@
-# Introduction to Docker for Robotics and Machine Learning {#docker-intro status=beta}
+# Introduction to Docker for Robotics and Machine Learning {#docker-intro status=ready}
 
 <img src="pics/docker_logo.png" id="docker_logo"/>
 
@@ -259,10 +259,10 @@ What does Docker consider when deciding whether to use the cache? First is the `
     COPY duck.txt .
     RUN cat duck.txt
 
-Now if we run the command 
+Now if we run the command
 
     $ echo "Make way for duckies!" > duck.txt && docker build -t my/duck:v5 .
-    
+
 this will create a new file `duck.txt` in your build directory, and we will copy that file into the Docker image, then print its contents:
 
     Sending build context to Docker daemon  3.072kB
@@ -277,12 +277,12 @@ this will create a new file `duck.txt` in your build directory, and we will copy
      ---> 1633e3e10bef
     Successfully built 1633e3e10bef
     Successfully tagged my/duck:v5
-    
-As long as the first three lines of the `Dockerfile` and `duck.txt` are not modified, these layers will be cached and Docker will not need to rebuild them. However if the contents of `duck.txt` are later modified, this will force a rebuild to occur. For example, if we run 
 
-    $ echo "Thank you. Have a nice day!" >> duck.txt 
+As long as the first three lines of the `Dockerfile` and `duck.txt` are not modified, these layers will be cached and Docker will not need to rebuild them. However if the contents of `duck.txt` are later modified, this will force a rebuild to occur. For example, if we run
+
+    $ echo "Thank you. Have a nice day!" >> duck.txt
     $ docker build -t my/duck:v5 .
- 
+
 we have:
 
     Sending build context to Docker daemon  3.072kB
@@ -305,10 +305,10 @@ Like Git's `.gitignore`, Docker has a `.dockerignore` file. If we add a line to 
 
 ### Multi-stage builds
 
-Docker's filesystem is purely additive, so each layer will only increase the size of the final image. If you care about image size, it is often necessary to reduce the number of layers and tidy up unnecessary files. For example, when installing dependencies on Debian-based images, a common practice is to run 
+Docker's filesystem is purely additive, so each layer will only increase the size of the final image. If you care about image size, it is often necessary to reduce the number of layers and tidy up unnecessary files. For example, when installing dependencies on Debian-based images, a common practice is to run
 
     RUN apt-get update && apt-get install ... && rm -rf /var/lib/apt/lists/*
-     
+
  ensuring the package list is not baked into the image (Docker will only checkpoint the layer after an instruction is complete). But often, you only care about a single artifact, although building it can take several steps. To avoid this dance of chaining together commands and removing the garbage in a single instruction, we can use a technique called [*multi-stage builds*](https://docs.docker.com/develop/develop-images/multistage-build/). These allow you to build sequential images inside a `Dockerfile`, and copy resources from one to another, discarding the rest:
 
     FROM your/duck:v3 as template1              # We can use `template1` as an alias later
